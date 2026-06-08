@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Ga</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --orange: #FF6B35;
+            --orange-light: #FFF0EA;
+            --orange-dark: #CC4A1A;
+            --blue: #2563EB;
+            --blue-light: #EFF6FF;
+            --blue-dark: #1D4ED8;
+            --bg: #F8F9FC;
+            --card: #ffffff;
+            --text: #1A1D2E;
+            --muted: #6B7280;
+            --border: #E5E7EB;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Sarabun', 'Noto Sans Thai', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ---- NAV ---- */
+        nav {
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            padding: 0 32px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .nav-logo {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, var(--orange), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links { display: flex; gap: 8px; }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* ---- MAIN ---- */
+        main {
+            flex: 1;
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 48px 24px 60px;
+            width: 100%;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .page-header .badge {
+            display: inline-block;
+            background: var(--blue-light);
+            color: var(--blue-dark);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 14px;
+            border-radius: 100px;
+            margin-bottom: 16px;
+            letter-spacing: 0.5px;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.4;
+        }
+
+        /* ---- GRID ---- */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 680px) {
+            .grid { grid-template-columns: 1fr; }
+            .page-header h1 { font-size: 22px; }
+        }
+
+        /* ---- CARDS ---- */
+        .card {
+            background: var(--card);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.08);
+        }
+
+        .card-hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 28px 28px 24px;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            min-height: 120px;
+            transition: opacity 0.2s;
+        }
+
+        .card-hero:hover { opacity: 0.92; }
+
+        .card-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: 0.08;
+            background-image: radial-gradient(circle at 80% 50%, white 0%, transparent 60%);
+        }
+
+        .orange-hero { background: linear-gradient(135deg, #FF8C5A 0%, var(--orange) 60%, #E85520 100%); }
+        .blue-hero   { background: linear-gradient(135deg, #60A5FA 0%, var(--blue) 60%, #1E40AF 100%); }
+
+        .hero-text-group { display: flex; flex-direction: column; gap: 4px; }
+
+        .hero-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.75);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.2;
+        }
+
+        .hero-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            flex-shrink: 0;
+        }
+
+        /* ---- ITEM LIST ---- */
+        .item-list {
+            padding: 16px 24px 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .item-list-header {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--muted);
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .item:last-child { border-bottom: none; }
+
+        .item-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 6px;
+        }
+
+        .dot-orange { background: var(--orange); }
+        .dot-blue   { background: var(--blue); }
+
+        .item-text {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .item-empty {
+            font-size: 13px;
+            color: var(--muted);
+            font-style: italic;
+        }
+
+        /* ---- DATE CHIP ---- */
+        .date-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 100px;
+            margin-bottom: 6px;
+        }
+
+        .chip-blue {
+            background: var(--blue-light);
+            color: var(--blue-dark);
+        }
+
+        .chip-orange {
+            background: var(--orange-light);
+            color: var(--orange-dark);
+        }
+
+        /* ---- FOOTER ---- */
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 13px;
+            color: var(--muted);
+            border-top: 1px solid var(--border);
+            background: #fff;
+        }
+
+        footer span {
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--orange), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ---- ANIMATIONS ---- */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .card:nth-child(1) { animation: fadeUp 0.45s ease both; }
+        .card:nth-child(2) { animation: fadeUp 0.45s 0.1s ease both; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-logo">E-Ga</div>
+        <div class="nav-links">
+            <!-- <a href="#">หน้าแรก</a>
+            <a href="#">เกี่ยวกับ</a> -->
+        </div>
+    </nav>
+
+    <main>
+        <div class="page-header">
+            <div class="badge">⚡ ครอบครัวด๊อกเตอร์เต่า</div>
+            <h1>คุณจะส่องอะไร<br>เลือกหมวดหมู่ได้เลย</h1>
+        </div>
+
+        <div class="grid">
+
+            <!-- ช่วยงาน -->
+            <div class="card">
+                <a href="https://e-ga.github.io/ez-time/" class="card-hero orange-hero">
+                    <div class="hero-text-group">
+                        <span class="hero-label">บริการ</span>
+                        <span class="hero-title">ช่วยงาน</span>
+                    </div>
+                    <div class="hero-icon">🛠️</div>
+                </a>
+                <div class="item-list">
+                    <div class="item-list-header">ภารกิจล่าสุด</div>
+                    <div class="item">
+                        <span class="item-dot dot-orange" style="opacity:0.35"></span>
+                        <span class="item-text item-empty">ยังไม่มีภารกิจงาน</span>
+                    </div>
+                    <div class="item">
+                        <span class="item-dot dot-orange" style="opacity:0.2"></span>
+                        <span class="item-text item-empty">—</span>
+                    </div>
+                    <div class="item">
+                        <span class="item-dot dot-orange" style="opacity:0.2"></span>
+                        <span class="item-text item-empty">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- รับความรู้ -->
+            <div class="card">
+                <a href="https://e-ga.github.io/hft-ega/dashboard.html" class="card-hero blue-hero">
+                    <div class="hero-text-group">
+                        <span class="hero-label">การเรียนรู้</span>
+                        <span class="hero-title">รับความรู้</span>
+                    </div>
+                    <div class="hero-icon">📚</div>
+                </a>
+                <div class="item-list">
+                    <div class="item-list-header">อัปเดตล่าสุด</div>
+
+                    <div class="item">
+                        <span class="item-dot dot-blue"></span>
+                        <div>
+                            <div class="date-chip chip-blue">📅 8/6/2569</div>
+                            <div class="item-text">ไม่มีการแลกเปลี่ยนความรู้</div>
+                        </div>
+                    </div>
+
+                    <div class="item">
+                        <span class="item-dot dot-blue"></span>
+                        <div>
+                            <div class="date-chip chip-orange">🔬 วิทย์ ป.5</div>
+                            <div class="item-text">มีการบ้านทำแบบฝึกหัดท้ายบทที่ 1</div>
+                        </div>
+                    </div>
+
+                    <div class="item">
+                        <span class="item-dot dot-blue" style="opacity:0.2"></span>
+                        <span class="item-text item-empty">—</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        powered by <span>E-Ga</span>
+    </footer>
+
+</body>
+</html>
