@@ -7,7 +7,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --orange: #FF6B35;
@@ -16,58 +15,75 @@
             --blue: #2563EB;
             --blue-light: #EFF6FF;
             --blue-dark: #1D4ED8;
-            --bg: #F8F9FC;
-            --card: #ffffff;
+            --green: #0E9F6E;
+            --green-light: #E7F8F0;
+            --violet: #7C3AED;
+            --violet-light: #F2EAFE;
+            --bg: #F7F8FB;
+            --card: #FFFFFF;
             --text: #1A1D2E;
             --muted: #6B7280;
             --border: #E5E7EB;
+            --shadow: 0 14px 34px rgba(26, 29, 46, 0.08);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            letter-spacing: 0;
+        }
 
         body {
-            font-family: 'Sarabun', 'Noto Sans Thai', sans-serif;
-            background: var(--bg);
-            color: var(--text);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Sarabun', 'Noto Sans Thai', sans-serif;
+            overflow-x: hidden;
         }
 
-        /* ---- NAV ---- */
         nav {
-            background: #fff;
-            border-bottom: 1px solid var(--border);
-            padding: 0 32px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
             height: 60px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 10;
+            padding: 0 32px;
+            background: rgba(255, 255, 255, 0.92);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(12px);
         }
 
         .nav-logo {
+            flex: 0 0 auto;
             font-size: 22px;
             font-weight: 700;
-            letter-spacing: -0.5px;
             background: linear-gradient(135deg, var(--orange), var(--blue));
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
-        .nav-links { display: flex; gap: 8px; }
+        .nav-links {
+            display: flex;
+            min-width: 0;
+            gap: 8px;
+            justify-content: flex-end;
+        }
 
         .nav-links a {
-            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 8px;
             color: var(--muted);
             font-size: 14px;
             font-weight: 500;
-            padding: 6px 14px;
-            border-radius: 8px;
-            transition: all 0.2s;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: background 0.2s, color 0.2s;
         }
 
         .nav-links a:hover {
@@ -75,132 +91,152 @@
             color: var(--text);
         }
 
-        /* ---- MAIN ---- */
         main {
             flex: 1;
-            max-width: 960px;
+            width: 100%;
+            max-width: 1040px;
             margin: 0 auto;
             padding: 48px 24px 60px;
-            width: 100%;
         }
 
         .page-header {
+            margin-bottom: 42px;
             text-align: center;
-            margin-bottom: 48px;
         }
 
-        .page-header .badge {
-            display: inline-block;
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding: 5px 14px;
+            border-radius: 999px;
             background: var(--blue-light);
             color: var(--blue-dark);
             font-size: 12px;
-            font-weight: 600;
-            padding: 4px 14px;
-            border-radius: 100px;
-            margin-bottom: 16px;
-            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        .badge-mark {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--orange);
+            box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.14);
         }
 
         .page-header h1 {
-            font-size: 28px;
-            font-weight: 700;
             color: var(--text);
-            line-height: 1.4;
+            font-size: 30px;
+            font-weight: 700;
+            line-height: 1.42;
         }
 
-        /* ---- GRID ---- */
         .grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 24px;
         }
 
-        @media (max-width: 680px) {
-            .grid { grid-template-columns: 1fr; }
-            .page-header h1 { font-size: 22px; }
+        .grid > * {
+            min-width: 0;
         }
 
-        /* ---- CARDS ---- */
         .card {
-            background: var(--card);
-            border-radius: 20px;
-            border: 1px solid var(--border);
             overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--card);
             transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
 
         .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 16px 40px rgba(0,0,0,0.08);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
         }
 
         .card-hero {
+            position: relative;
+            min-height: 120px;
+            min-width: 0;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 28px 28px 24px;
-            text-decoration: none;
-            position: relative;
+            gap: 20px;
             overflow: hidden;
-            min-height: 120px;
-            transition: opacity 0.2s;
+            padding: 28px;
+            text-decoration: none;
         }
-
-        .card-hero:hover { opacity: 0.92; }
 
         .card-hero::before {
             content: '';
             position: absolute;
             inset: 0;
-            opacity: 0.08;
-            background-image: radial-gradient(circle at 80% 50%, white 0%, transparent 60%);
+            opacity: 0.18;
+            background:
+                linear-gradient(120deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0)),
+                radial-gradient(circle at 82% 45%, rgba(255, 255, 255, 0.42), transparent 35%);
         }
 
-        .orange-hero { background: linear-gradient(135deg, #FF8C5A 0%, var(--orange) 60%, #E85520 100%); }
-        .blue-hero   { background: linear-gradient(135deg, #60A5FA 0%, var(--blue) 60%, #1E40AF 100%); }
+        .orange-hero {
+            background: linear-gradient(135deg, #FF8C5A 0%, var(--orange) 58%, #D9551F 100%);
+        }
 
-        .hero-text-group { display: flex; flex-direction: column; gap: 4px; }
+        .blue-hero {
+            background: linear-gradient(135deg, #60A5FA 0%, var(--blue) 58%, #1E40AF 100%);
+        }
+
+        .hero-text-group,
+        .hero-icon {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-text-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 0;
+        }
 
         .hero-label {
+            color: rgba(255, 255, 255, 0.78);
             font-size: 12px;
-            font-weight: 600;
-            color: rgba(255,255,255,0.75);
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            font-weight: 700;
         }
 
         .hero-title {
+            color: #FFFFFF;
             font-size: 32px;
             font-weight: 700;
-            color: #fff;
             line-height: 1.2;
+            overflow-wrap: anywhere;
         }
 
         .hero-icon {
             width: 56px;
             height: 56px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            flex: 0 0 auto;
+            border: 1px solid rgba(255, 255, 255, 0.24);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.18);
+            color: #FFFFFF;
+            font-size: 28px;
+            font-weight: 700;
         }
 
-        /* ---- ITEM LIST ---- */
         .item-list {
             padding: 16px 24px 20px;
             border-top: 1px solid var(--border);
         }
 
         .item-list-header {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--muted);
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
             margin-bottom: 12px;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
         }
 
         .item {
@@ -211,42 +247,46 @@
             border-bottom: 1px solid var(--border);
         }
 
-        .item:last-child { border-bottom: none; }
+        .item:last-child {
+            border-bottom: 0;
+        }
 
         .item-dot {
             width: 8px;
             height: 8px;
+            flex: 0 0 auto;
+            margin-top: 7px;
             border-radius: 50%;
-            flex-shrink: 0;
-            margin-top: 6px;
         }
 
-        .dot-orange { background: var(--orange); }
-        .dot-blue   { background: var(--blue); }
+        .dot-orange {
+            background: var(--orange);
+        }
+
+        .dot-blue {
+            background: var(--blue);
+        }
 
         .item-text {
+            color: var(--text);
             font-size: 14px;
             font-weight: 400;
-            color: var(--text);
             line-height: 1.6;
         }
 
         .item-empty {
-            font-size: 13px;
             color: var(--muted);
             font-style: italic;
         }
 
-        /* ---- DATE CHIP ---- */
         .date-chip {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 3px 10px;
-            border-radius: 100px;
             margin-bottom: 6px;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
         }
 
         .chip-blue {
@@ -259,518 +299,253 @@
             color: var(--orange-dark);
         }
 
-        /* ---- FOOTER ---- */
-        footer {
-            text-align: center;
-            padding: 20px;
-            font-size: 13px;
-            color: var(--muted);
+        .schedule-section {
+            margin-top: 34px;
+            padding-top: 26px;
             border-top: 1px solid var(--border);
-            background: #fff;
+        }
+
+        .schedule-heading {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 18px;
+            margin-bottom: 16px;
+        }
+
+        .schedule-kicker {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .schedule-heading h2 {
+            margin-top: 4px;
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.35;
+        }
+
+        .schedule-count {
+            flex: 0 0 auto;
+            padding: 7px 14px;
+            border: 1px solid #B7D7C8;
+            border-radius: 999px;
+            background: var(--green-light);
+            color: #08764F;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .schedule-table {
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--card);
+            box-shadow: var(--shadow);
+        }
+
+        .schedule-row {
+            display: grid;
+            grid-template-columns: minmax(140px, 1.1fr) minmax(110px, 0.9fr) minmax(150px, 1.2fr) minmax(110px, 0.8fr);
+            align-items: center;
+        }
+
+        .schedule-head {
+            background: #F2F5FA;
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .schedule-row:not(.schedule-head) {
+            border-top: 1px solid var(--border);
+        }
+
+        .schedule-cell {
+            min-width: 0;
+            padding: 14px 16px;
+            line-height: 1.5;
+        }
+
+        .schedule-date {
+            font-weight: 700;
+        }
+
+        .shift-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            justify-self: start;
+            min-width: 78px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .shift-morning {
+            background: var(--green-light);
+            color: #08764F;
+        }
+
+        .shift-afternoon {
+            background: var(--orange-light);
+            color: var(--orange-dark);
+        }
+
+        .shift-night {
+            background: var(--violet-light);
+            color: #5B21B6;
+        }
+
+        footer {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            background: #FFFFFF;
+            color: var(--muted);
+            font-size: 13px;
+            text-align: center;
         }
 
         footer span {
-            font-weight: 600;
+            font-weight: 700;
             background: linear-gradient(135deg, var(--orange), var(--blue));
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
-        /* ---- ANIMATIONS ---- */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(18px); }
-            to   { opacity: 1; transform: translateY(0); }
+        @media (max-width: 760px) {
+            nav {
+                padding: 0 16px;
+                gap: 12px;
+            }
+
+            main {
+                padding: 36px 18px 44px;
+            }
+
+            .page-header h1 {
+                font-size: 23px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .schedule-heading {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .schedule-count {
+                align-self: flex-start;
+            }
+
+            .schedule-row {
+                grid-template-columns: 1fr;
+            }
+
+            .schedule-head {
+                display: none;
+            }
+
+            .schedule-row:not(.schedule-head) {
+                padding: 12px 14px;
+            }
+
+            .schedule-cell {
+                display: grid;
+                grid-template-columns: 86px 1fr;
+                gap: 12px;
+                padding: 5px 0;
+            }
+
+            .schedule-cell::before {
+                content: attr(data-label);
+                color: var(--muted);
+                font-size: 12px;
+                font-weight: 700;
+            }
         }
 
-        .card:nth-child(1) { animation: fadeUp 0.45s ease both; }
-        .card:nth-child(2) { animation: fadeUp 0.45s 0.1s ease both; }
-         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        @media (max-width: 560px) {
+            nav {
+                justify-content: flex-start;
+            }
 
-  :root {
-    --bg:        #F7F6F2;
-    --surface:   #FFFFFF;
-    --border:    #E2E0D8;
-    --text:      #1A1917;
-    --muted:     #9A9690;
-    --accent:    #3B5BDB;
-    --accent-light: #EEF2FF;
-    --today-bg:  #3B5BDB;
-    --today-fg:  #FFFFFF;
-    --event-1:   #3B5BDB;
-    --event-2:   #0CA678;
-    --event-3:   #F76707;
-    --event-4:   #AE3EC9;
-    --shadow:    0 2px 12px rgba(0,0,0,0.07);
-  }
+            .nav-links {
+                flex: 1;
+                gap: 4px;
+                justify-content: flex-start;
+            }
 
-  body {
-    font-family: 'IBM Plex Sans Thai', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 32px 16px;
-  }
+            .nav-links a {
+                padding: 6px 8px;
+                font-size: 12px;
+            }
 
-  .calendar-wrap {
-    width: 100%;
-    max-width: 860px;
-  }
+            main {
+                max-width: 430px;
+            }
 
-  /* ── Header ── */
-  .cal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 28px;
-  }
+            .card-hero {
+                padding: 24px 22px;
+            }
 
-  .cal-title {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
+            .hero-icon {
+                display: none;
+            }
 
-  .cal-month {
-    font-size: 2rem;
-    font-weight: 600;
-    letter-spacing: -0.03em;
-    line-height: 1;
-  }
+            .schedule-cell {
+                grid-template-columns: 80px 1fr;
+            }
+        }
 
-  .cal-year {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.82rem;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-  }
+        @media (max-width: 420px) {
+            nav {
+                padding: 0 14px;
+            }
 
-  .nav-group {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
+            .card-hero {
+                padding: 22px 20px;
+            }
 
-  .nav-btn {
-    width: 38px; height: 38px;
-    border-radius: 10px;
-    border: 1.5px solid var(--border);
-    background: var(--surface);
-    color: var(--text);
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1rem;
-    transition: background 0.15s, border-color 0.15s;
-  }
-  .nav-btn:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+            .hero-title {
+                font-size: 28px;
+            }
 
-  .today-btn {
-    height: 38px;
-    padding: 0 16px;
-    border-radius: 10px;
-    border: 1.5px solid var(--border);
-    background: var(--surface);
-    color: var(--text);
-    cursor: pointer;
-    font-family: 'IBM Plex Sans Thai', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 500;
-    transition: background 0.15s, border-color 0.15s;
-  }
-  .today-btn:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
-
-  /* ── Grid ── */
-  .cal-grid {
-    background: var(--surface);
-    border-radius: 18px;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    border: 1px solid var(--border);
-  }
-
-  .day-names {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    border-bottom: 1px solid var(--border);
-    background: var(--bg);
-  }
-
-  .day-name {
-    text-align: center;
-    padding: 12px 0;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
-  .day-name.weekend { color: #C92A2A; }
-
-  .days-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-  }
-
-  .day-cell {
-    min-height: 100px;
-    padding: 10px 10px 8px;
-    border-right: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-    transition: background 0.12s;
-    position: relative;
-  }
-  .day-cell:nth-child(7n) { border-right: none; }
-  .day-cell:hover { background: var(--accent-light); }
-
-  .day-num {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px; height: 28px;
-    border-radius: 50%;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.82rem;
-    font-weight: 500;
-    color: var(--text);
-    margin-bottom: 6px;
-    transition: background 0.12s, color 0.12s;
-  }
-
-  .day-cell.today .day-num {
-    background: var(--today-bg);
-    color: var(--today-fg);
-  }
-
-  .day-cell.other-month .day-num { color: var(--muted); }
-  .day-cell.other-month { background: #FAFAF8; }
-
-  .day-cell.weekend-day .day-num { color: #C92A2A; }
-  .day-cell.today.weekend-day .day-num { color: var(--today-fg); }
-
-  /* ── Events ── */
-  .event-list { display: flex; flex-direction: column; gap: 3px; }
-
-  .event-pill {
-    font-size: 0.72rem;
-    font-weight: 500;
-    padding: 2px 7px;
-    border-radius: 5px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    cursor: pointer;
-    transition: opacity 0.15s;
-  }
-  .event-pill:hover { opacity: 0.8; }
-
-  .event-pill.color-1 { background: #EEF2FF; color: #3B5BDB; }
-  .event-pill.color-2 { background: #E6FCF5; color: #0B7A56; }
-  .event-pill.color-3 { background: #FFF4E6; color: #C45700; }
-  .event-pill.color-4 { background: #F8F0FC; color: #862E9C; }
-
-  .more-events {
-    font-size: 0.68rem;
-    color: var(--muted);
-    font-family: 'IBM Plex Mono', monospace;
-    padding-left: 2px;
-    margin-top: 1px;
-  }
-
-  /* ── Modal ── */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(26,25,23,0.4);
-    backdrop-filter: blur(4px);
-    z-index: 100;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-  }
-  .modal-overlay.open { display: flex; }
-
-  .modal {
-    background: var(--surface);
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.18);
-    width: 100%;
-    max-width: 420px;
-    overflow: hidden;
-    animation: slideUp 0.22s ease;
-  }
-
-  @keyframes slideUp {
-    from { transform: translateY(24px); opacity: 0; }
-    to   { transform: translateY(0);    opacity: 1; }
-  }
-
-  .modal-header {
-    padding: 22px 24px 18px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-  }
-
-  .modal-date-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--muted);
-    letter-spacing: 0.08em;
-    margin-bottom: 4px;
-  }
-
-  .modal-day-title {
-    font-size: 1.3rem;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-  }
-
-  .modal-close {
-    width: 30px; height: 30px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: transparent;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--muted);
-    font-size: 1rem;
-    transition: background 0.15s;
-  }
-  .modal-close:hover { background: var(--bg); }
-
-  .modal-body { padding: 20px 24px; }
-
-  .auth-panel {
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 12px;
-    margin-bottom: 16px;
-    background: var(--bg);
-  }
-
-  .auth-row {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 8px;
-  }
-
-  .auth-btn,
-  .auth-link {
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-family: 'IBM Plex Sans Thai', sans-serif;
-    font-weight: 600;
-  }
-
-  .auth-btn {
-    padding: 0 14px;
-    background: var(--text);
-    color: #fff;
-  }
-
-  .auth-link {
-    background: transparent;
-    color: var(--accent);
-    padding: 4px 0;
-  }
-
-  .auth-btn:disabled,
-  .add-btn:disabled,
-  .del-btn:disabled {
-    cursor: not-allowed;
-    opacity: 0.55;
-  }
-
-  .auth-message {
-    min-height: 18px;
-    font-size: 0.76rem;
-    color: var(--muted);
-  }
-
-  .auth-message.error { color: #C92A2A; }
-  .auth-message.success { color: #0B7A56; }
-
-  .auth-state {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    font-size: 0.86rem;
-    color: var(--text);
-    font-weight: 600;
-  }
-
-  [hidden] { display: none !important; }
-
-  .event-form { display: flex; flex-direction: column; gap: 12px; }
-
-  .form-field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .form-label {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--muted);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-
-  .form-input {
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    padding: 9px 13px;
-    font-family: 'IBM Plex Sans Thai', sans-serif;
-    font-size: 0.9rem;
-    color: var(--text);
-    background: var(--bg);
-    transition: border-color 0.15s;
-    outline: none;
-    width: 100%;
-  }
-  .form-input:focus { border-color: var(--accent); background: var(--surface); }
-
-  .color-picker {
-    display: flex;
-    gap: 8px;
-  }
-
-  .color-dot {
-    width: 26px; height: 26px;
-    border-radius: 50%;
-    cursor: pointer;
-    border: 3px solid transparent;
-    transition: border-color 0.15s, transform 0.15s;
-  }
-  .color-dot:hover { transform: scale(1.15); }
-  .color-dot.selected { border-color: var(--text); }
-
-  .c1 { background: var(--event-1); }
-  .c2 { background: var(--event-2); }
-  .c3 { background: var(--event-3); }
-  .c4 { background: var(--event-4); }
-
-  .add-btn {
-    width: 100%;
-    padding: 11px;
-    border-radius: 12px;
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    font-family: 'IBM Plex Sans Thai', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-top: 4px;
-    transition: opacity 0.15s, transform 0.1s;
-  }
-  .add-btn:hover { opacity: 0.88; transform: translateY(-1px); }
-  .add-btn:active { transform: translateY(0); }
-
-  .existing-events { margin-bottom: 16px; }
-
-  .existing-title {
-    font-size: 0.72rem;
-    font-weight: 500;
-    color: var(--muted);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
-
-  .modal-event-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 9px 12px;
-    border-radius: 10px;
-    margin-bottom: 6px;
-    font-size: 0.88rem;
-  }
-
-  .modal-event-item.color-1 { background: #EEF2FF; color: #3B5BDB; }
-  .modal-event-item.color-2 { background: #E6FCF5; color: #0B7A56; }
-  .modal-event-item.color-3 { background: #FFF4E6; color: #C45700; }
-  .modal-event-item.color-4 { background: #F8F0FC; color: #862E9C; }
-
-  .del-btn {
-    background: none; border: none; cursor: pointer;
-    font-size: 0.9rem; opacity: 0.5;
-    transition: opacity 0.15s;
-    padding: 2px 4px;
-  }
-  .del-btn:hover { opacity: 1; }
-
-  .divider {
-    height: 1px; background: var(--border);
-    margin: 16px 0;
-  }
-
-  /* ── Mini legend ── */
-  .legend {
-    display: flex;
-    gap: 16px;
-    margin-top: 20px;
-    flex-wrap: wrap;
-  }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.75rem;
-    color: var(--muted);
-  }
-
-  .legend-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-  }
-
-  @media (max-width: 600px) {
-    .day-cell { min-height: 64px; padding: 7px 5px 5px; }
-    .day-num  { width: 24px; height: 24px; font-size: 0.75rem; }
-    .cal-month { font-size: 1.4rem; }
-    .event-pill { font-size: 0.65rem; padding: 1px 5px; }
-  }
+            .schedule-heading h2 {
+                font-size: 21px;
+            }
+        }
     </style>
 </head>
 <body>
-
     <nav>
         <div class="nav-logo">E-Ga</div>
         <div class="nav-links">
-            <!-- <a href="#">หน้าแรก</a>
-            <a href="#">เกี่ยวกับ</a> -->
+            <a href="https://e-ga.github.io/ez-time/">ช่วยงาน</a>
+            <a href="https://e-ga.github.io/hft-ega/dashboard.html">รับความรู้</a>
         </div>
     </nav>
 
     <main>
-        <div class="page-header">
-            <div class="badge">⚡ ครอบครัวด๊อกเตอร์เต่า</div>
+        <header class="page-header">
+            <div class="badge"><span class="badge-mark"></span>ครอบครัวด๊อกเตอร์เต่า</div>
             <h1>คุณจะส่องอะไร<br>เลือกหมวดหมู่ได้เลย</h1>
-        </div>
+        </header>
 
-        <div class="grid">
-
-            <!-- ช่วยงาน -->
+        <section class="grid" aria-label="หมวดหมู่">
             <div class="card">
                 <a href="https://e-ga.github.io/ez-time/" class="card-hero orange-hero">
                     <div class="hero-text-group">
                         <span class="hero-label">บริการ</span>
                         <span class="hero-title">ช่วยงาน</span>
                     </div>
-                    <div class="hero-icon">🛠️</div>
+                    <div class="hero-icon" aria-hidden="true">+</div>
                 </a>
                 <div class="item-list">
                     <div class="item-list-header">ภารกิจล่าสุด</div>
@@ -780,23 +555,22 @@
                     </div>
                     <div class="item">
                         <span class="item-dot dot-orange" style="opacity:0.2"></span>
-                        <span class="item-text item-empty">—</span>
+                        <span class="item-text item-empty">-</span>
                     </div>
                     <div class="item">
                         <span class="item-dot dot-orange" style="opacity:0.2"></span>
-                        <span class="item-text item-empty">—</span>
+                        <span class="item-text item-empty">-</span>
                     </div>
                 </div>
             </div>
 
-            <!-- รับความรู้ -->
             <div class="card">
                 <a href="https://e-ga.github.io/hft-ega/dashboard.html" class="card-hero blue-hero">
                     <div class="hero-text-group">
                         <span class="hero-label">การเรียนรู้</span>
                         <span class="hero-title">รับความรู้</span>
                     </div>
-                    <div class="hero-icon">📚</div>
+                    <div class="hero-icon" aria-hidden="true">i</div>
                 </a>
                 <div class="item-list">
                     <div class="item-list-header">อัปเดตล่าสุด</div>
@@ -804,7 +578,7 @@
                     <div class="item">
                         <span class="item-dot dot-blue"></span>
                         <div>
-                            <div class="date-chip chip-blue">📅 8/6/2569</div>
+                            <div class="date-chip chip-blue">8/6/2569</div>
                             <div class="item-text">ไม่มีการแลกเปลี่ยนความรู้</div>
                         </div>
                     </div>
@@ -812,483 +586,83 @@
                     <div class="item">
                         <span class="item-dot dot-blue"></span>
                         <div>
-                            <div class="date-chip chip-orange">🔬 วิทย์ ป.5</div>
+                            <div class="date-chip chip-orange">วิทย์ ป.5</div>
                             <div class="item-text">มีการบ้านทำแบบฝึกหัดท้ายบทที่ 1</div>
                         </div>
                     </div>
 
                     <div class="item">
                         <span class="item-dot dot-blue" style="opacity:0.2"></span>
-                        <span class="item-text item-empty">—</span>
+                        <span class="item-text item-empty">-</span>
                     </div>
                 </div>
             </div>
+        </section>
 
-        </div>
+        <section class="schedule-section" aria-labelledby="scheduleTitle">
+            <div class="schedule-heading">
+                <div>
+                    <div class="schedule-kicker">ตารางกิจกรรม</div>
+                    <h2 id="scheduleTitle">เดือนมิถุนายน 2569</h2>
+                </div>
+                <div class="schedule-count">ทั้งหมด 6 รายการ</div>
+            </div>
+
+            <div class="schedule-table" role="table" aria-label="ตารางกิจกรรมเดือนมิถุนายน 2569">
+                <div class="schedule-row schedule-head" role="row">
+                    <div class="schedule-cell" role="columnheader">วันที่</div>
+                    <div class="schedule-cell" role="columnheader">วัน</div>
+                    <div class="schedule-cell" role="columnheader">กิจกรรม</div>
+                    <div class="schedule-cell" role="columnheader">กะ</div>
+                </div>
+
+                <div class="schedule-row" role="row">
+                    <div class="schedule-cell schedule-date" role="cell" data-label="วันที่">11 มิ.ย. 2569</div>
+                    <div class="schedule-cell" role="cell" data-label="วัน">พฤหัสบดี</div>
+                    <div class="schedule-cell" role="cell" data-label="กิจกรรม">ทำงานดึก</div>
+                    <div class="schedule-cell" role="cell" data-label="กะ"><span class="shift-pill shift-night">กะดึก</span></div>
+                </div>
+
+                <div class="schedule-row" role="row">
+                    <div class="schedule-cell schedule-date" role="cell" data-label="วันที่">14 มิ.ย. 2569</div>
+                    <div class="schedule-cell" role="cell" data-label="วัน">อาทิตย์</div>
+                    <div class="schedule-cell" role="cell" data-label="กิจกรรม">ทำงานเช้า</div>
+                    <div class="schedule-cell" role="cell" data-label="กะ"><span class="shift-pill shift-morning">กะเช้า</span></div>
+                </div>
+
+                <div class="schedule-row" role="row">
+                    <div class="schedule-cell schedule-date" role="cell" data-label="วันที่">17 มิ.ย. 2569</div>
+                    <div class="schedule-cell" role="cell" data-label="วัน">พุธ</div>
+                    <div class="schedule-cell" role="cell" data-label="กิจกรรม">ทำงานบ่าย</div>
+                    <div class="schedule-cell" role="cell" data-label="กะ"><span class="shift-pill shift-afternoon">กะบ่าย</span></div>
+                </div>
+
+                <div class="schedule-row" role="row">
+                    <div class="schedule-cell schedule-date" role="cell" data-label="วันที่">22 มิ.ย. 2569</div>
+                    <div class="schedule-cell" role="cell" data-label="วัน">จันทร์</div>
+                    <div class="schedule-cell" role="cell" data-label="กิจกรรม">ทำงานดึก</div>
+                    <div class="schedule-cell" role="cell" data-label="กะ"><span class="shift-pill shift-night">กะดึก</span></div>
+                </div>
+
+                <div class="schedule-row" role="row">
+                    <div class="schedule-cell schedule-date" role="cell" data-label="วันที่">24 มิ.ย. 2569</div>
+                    <div class="schedule-cell" role="cell" data-label="วัน">พุธ</div>
+                    <div class="schedule-cell" role="cell" data-label="กิจกรรม">ทำงานดึก</div>
+                    <div class="schedule-cell" role="cell" data-label="กะ"><span class="shift-pill shift-night">กะดึก</span></div>
+                </div>
+
+                <div class="schedule-row" role="row">
+                    <div class="schedule-cell schedule-date" role="cell" data-label="วันที่">26 มิ.ย. 2569</div>
+                    <div class="schedule-cell" role="cell" data-label="วัน">ศุกร์</div>
+                    <div class="schedule-cell" role="cell" data-label="กิจกรรม">ทำงานดึก</div>
+                    <div class="schedule-cell" role="cell" data-label="กะ"><span class="shift-pill shift-night">กะดึก</span></div>
+                </div>
+            </div>
+        </section>
     </main>
-
-    <body>
-
-<div class="calendar-wrap">
-  <div class="cal-header">
-    <div class="cal-title">
-      <div class="cal-month" id="monthLabel"></div>
-      <div class="cal-year" id="yearLabel"></div>
-    </div>
-    <div class="nav-group">
-      <button class="today-btn" onclick="goToday()">วันนี้</button>
-      <button class="nav-btn" onclick="changeMonth(-1)">‹</button>
-      <button class="nav-btn" onclick="changeMonth(1)">›</button>
-    </div>
-  </div>
-
-  <div class="cal-grid">
-    <div class="day-names">
-      <div class="day-name weekend">อา</div>
-      <div class="day-name">จ</div>
-      <div class="day-name">อ</div>
-      <div class="day-name">พ</div>
-      <div class="day-name">พฤ</div>
-      <div class="day-name">ศ</div>
-      <div class="day-name weekend">ส</div>
-    </div>
-    <div class="days-grid" id="daysGrid"></div>
-  </div>
-
-  <div class="legend">
-    <div class="legend-item"><div class="legend-dot" style="background:#3B5BDB"></div>งาน / Work</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#0CA678"></div>ส่วนตัว</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#F76707"></div>นัดหมาย</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#AE3EC9"></div>อื่นๆ</div>
-  </div>
-</div>
-
-<!-- Modal -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
-  <div class="modal">
-    <div class="modal-header">
-      <div>
-        <div class="modal-date-label" id="modalDateLabel"></div>
-        <div class="modal-day-title" id="modalDayTitle"></div>
-      </div>
-      <button class="modal-close" type="button" onclick="closeModalDirect()">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="existing-events" id="existingEvents"></div>
-      <div class="auth-panel" id="authPanel">
-        <div class="form-field" id="authForm">
-          <div class="form-label">รหัสผู้จัดกิจกรรม</div>
-          <div class="auth-row">
-            <input class="form-input" id="passcodeInput" type="password" placeholder="กรอกรหัส" autocomplete="current-password" />
-            <button class="auth-btn" id="loginBtn" type="button" onclick="loginAdmin()">ยืนยัน</button>
-          </div>
-          <div class="auth-message" id="authMessage" role="status"></div>
-        </div>
-        <div class="auth-state" id="authState" hidden>
-          <span>โหมดผู้จัดกิจกรรม</span>
-          <button class="auth-link" type="button" onclick="logoutAdmin()">ออก</button>
-        </div>
-      </div>
-      <div class="event-form" id="eventForm" hidden>
-        <div class="form-field">
-          <div class="form-label">ชื่อกิจกรรม</div>
-          <input class="form-input" id="eventTitle" type="text" placeholder="เช่น ประชุมทีม, วันเกิด..." />
-        </div>
-        <div class="form-field">
-          <div class="form-label">เวลา (ไม่บังคับ)</div>
-          <input class="form-input" id="eventTime" type="time" />
-        </div>
-        <div class="form-field">
-          <div class="form-label">สี</div>
-          <div class="color-picker">
-            <div class="color-dot c1 selected" data-color="1" onclick="selectColor(1)"></div>
-            <div class="color-dot c2" data-color="2" onclick="selectColor(2)"></div>
-            <div class="color-dot c3" data-color="3" onclick="selectColor(3)"></div>
-            <div class="color-dot c4" data-color="4" onclick="selectColor(4)"></div>
-          </div>
-        </div>
-        <button class="add-btn" id="addEventBtn" type="button" onclick="addEvent()">+ เพิ่มกิจกรรม</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-  const MONTHS_TH = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน',
-                     'กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-  const DAYS_EN   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  const API_BASE   = '/api';
-
-  let current   = new Date();
-  let viewYear  = current.getFullYear();
-  let viewMonth = current.getMonth();
-  let selectedDate = null;
-  let selectedColor = 1;
-  let eventsCache = {};
-  let isCalendarAdmin = false;
-
-  function loadEvents() {
-    return eventsCache;
-  }
-
-  function dateKey(y, m, d) {
-    return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-  }
-
-  async function apiJson(path, options = {}) {
-    const init = { credentials: 'same-origin', ...options };
-    if (init.body && !(init.body instanceof FormData)) {
-      init.headers = { 'Content-Type': 'application/json', ...(init.headers || {}) };
-    }
-
-    const response = await fetch(`${API_BASE}${path}`, init);
-    let data = {};
-    try { data = await response.json(); } catch {}
-
-    if (!response.ok) {
-      const error = new Error(data.error || 'เกิดข้อผิดพลาด');
-      error.status = response.status;
-      throw error;
-    }
-    return data;
-  }
-
-  function setAuthMessage(text, type = '') {
-    const el = document.getElementById('authMessage');
-    if (!el) return;
-    el.textContent = text || '';
-    el.className = `auth-message${type ? ' ' + type : ''}`;
-  }
-
-  function updateAuthUi() {
-    const authForm = document.getElementById('authForm');
-    const authState = document.getElementById('authState');
-    const eventForm = document.getElementById('eventForm');
-
-    if (authForm) authForm.hidden = isCalendarAdmin;
-    if (authState) authState.hidden = !isCalendarAdmin;
-    if (eventForm) eventForm.hidden = !isCalendarAdmin;
-    if (!isCalendarAdmin) setAuthMessage('', '');
-    if (selectedDate) renderModalEvents();
-  }
-
-  async function refreshEvents() {
-    try {
-      const data = await apiJson('/events', { cache: 'no-store' });
-      eventsCache = data.events || {};
-      render();
-    } catch (error) {
-      eventsCache = {};
-      render();
-      setAuthMessage('เชื่อมต่อระบบบันทึกกิจกรรมไม่ได้', 'error');
-    }
-  }
-
-  async function checkAuth() {
-    try {
-      const data = await apiJson('/auth', { cache: 'no-store' });
-      isCalendarAdmin = !!data.authenticated;
-    } catch {
-      isCalendarAdmin = false;
-    }
-    updateAuthUi();
-  }
-
-  async function loginAdmin() {
-    const input = document.getElementById('passcodeInput');
-    const button = document.getElementById('loginBtn');
-    const code = input.value.trim();
-
-    if (!code) {
-      setAuthMessage('กรุณากรอกรหัส', 'error');
-      input.focus();
-      return;
-    }
-
-    button.disabled = true;
-    setAuthMessage('กำลังตรวจสอบ...', '');
-
-    try {
-      await apiJson('/login', {
-        method: 'POST',
-        body: JSON.stringify({ code })
-      });
-      isCalendarAdmin = true;
-      input.value = '';
-      updateAuthUi();
-      setTimeout(() => document.getElementById('eventTitle').focus(), 50);
-    } catch (error) {
-      isCalendarAdmin = false;
-      setAuthMessage(error.message || 'รหัสไม่ถูกต้อง', 'error');
-      input.focus();
-    } finally {
-      button.disabled = false;
-    }
-  }
-
-  async function logoutAdmin() {
-    try {
-      await apiJson('/logout', { method: 'POST' });
-    } catch {}
-
-    isCalendarAdmin = false;
-    updateAuthUi();
-    setTimeout(() => document.getElementById('passcodeInput').focus(), 50);
-  }
-
-  // ── Render ──────────────────────────────────────────
-  function render() {
-    const events = loadEvents();
-
-    document.getElementById('monthLabel').textContent = MONTHS_TH[viewMonth];
-    document.getElementById('yearLabel').textContent  = `${viewYear + 543}  ·  ${viewYear}`;
-
-    const grid  = document.getElementById('daysGrid');
-    grid.innerHTML = '';
-
-    const firstDay = new Date(viewYear, viewMonth, 1).getDay();
-    const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
-    const daysInPrev  = new Date(viewYear, viewMonth, 0).getDate();
-
-    const total = Math.ceil((firstDay + daysInMonth) / 7) * 7;
-
-    for (let i = 0; i < total; i++) {
-      let day, month, year, isOther = false;
-
-      if (i < firstDay) {
-        day = daysInPrev - firstDay + 1 + i;
-        month = viewMonth - 1; year = viewYear;
-        if (month < 0) { month = 11; year--; }
-        isOther = true;
-      } else if (i >= firstDay + daysInMonth) {
-        day = i - firstDay - daysInMonth + 1;
-        month = viewMonth + 1; year = viewYear;
-        if (month > 11) { month = 0; year++; }
-        isOther = true;
-      } else {
-        day = i - firstDay + 1;
-        month = viewMonth; year = viewYear;
-      }
-
-      const isToday = (day === current.getDate() && month === current.getMonth() && year === current.getFullYear());
-      const dow = (i % 7);
-      const isWeekend = dow === 0 || dow === 6;
-
-      const cell = document.createElement('div');
-      cell.className = 'day-cell' +
-        (isOther   ? ' other-month' : '') +
-        (isToday   ? ' today'       : '') +
-        (isWeekend ? ' weekend-day' : '');
-
-      cell.innerHTML = `<div class="day-num">${day}</div><div class="event-list" id="el-${year}-${month}-${day}"></div>`;
-
-      const _y = year, _m = month, _d = day;
-      cell.onclick = () => openModal(_y, _m, _d);
-      grid.appendChild(cell);
-
-      // Render events
-      const key = dateKey(year, month, day);
-      const dayEvents = events[key] || [];
-      const evList = cell.querySelector('.event-list');
-      const maxShow = 2;
-      dayEvents.slice(0, maxShow).forEach(ev => {
-        const pill = document.createElement('div');
-        pill.className = `event-pill color-${ev.color || 1}`;
-        pill.textContent = (ev.time ? ev.time + ' ' : '') + ev.title;
-        pill.onclick = (e) => { e.stopPropagation(); openModal(_y, _m, _d); };
-        evList.appendChild(pill);
-      });
-      if (dayEvents.length > maxShow) {
-        const more = document.createElement('div');
-        more.className = 'more-events';
-        more.textContent = `+${dayEvents.length - maxShow} อื่นๆ`;
-        evList.appendChild(more);
-      }
-    }
-  }
-
-  // ── Navigation ──────────────────────────────────────
-  function changeMonth(dir) {
-    viewMonth += dir;
-    if (viewMonth > 11) { viewMonth = 0;  viewYear++; }
-    if (viewMonth < 0)  { viewMonth = 11; viewYear--; }
-    render();
-  }
-  function goToday() {
-    viewYear = current.getFullYear();
-    viewMonth = current.getMonth();
-    render();
-  }
-
-  // ── Modal ───────────────────────────────────────────
-  function openModal(y, m, d) {
-    selectedDate = { y, m, d };
-    selectedColor = 1;
-
-    const thDay = ['วันอาทิตย์','วันจันทร์','วันอังคาร','วันพุธ','วันพฤหัสบดี','วันศุกร์','วันเสาร์'];
-    const dow = new Date(y, m, d).getDay();
-
-    document.getElementById('modalDateLabel').textContent =
-      `${String(d).padStart(2,'0')} ${MONTHS_TH[m]} ${y + 543}`;
-    document.getElementById('modalDayTitle').textContent = thDay[dow];
-
-    document.getElementById('eventTitle').value = '';
-    document.getElementById('eventTime').value  = '';
-    document.querySelectorAll('.color-dot').forEach(el => el.classList.remove('selected'));
-    document.querySelector('.color-dot[data-color="1"]').classList.add('selected');
-
-    updateAuthUi();
-    renderModalEvents();
-    document.getElementById('modalOverlay').classList.add('open');
-    setTimeout(() => {
-      const target = isCalendarAdmin ? 'eventTitle' : 'passcodeInput';
-      document.getElementById(target).focus();
-    }, 50);
-  }
-
-  function renderModalEvents() {
-    const events = loadEvents();
-    const key = dateKey(selectedDate.y, selectedDate.m, selectedDate.d);
-    const dayEvents = events[key] || [];
-    const container = document.getElementById('existingEvents');
-    container.innerHTML = '';
-
-    if (dayEvents.length === 0) {
-      return;
-    }
-
-    const title = document.createElement('div');
-    title.className = 'existing-title';
-    title.textContent = 'กิจกรรมในวันนี้';
-    container.appendChild(title);
-
-    dayEvents.forEach((ev, idx) => {
-      const item = document.createElement('div');
-      item.className = `modal-event-item color-${ev.color || 1}`;
-
-      const text = document.createElement('span');
-      text.textContent = `${ev.time ? ev.time + ' · ' : ''}${ev.title}`;
-      item.appendChild(text);
-
-      if (isCalendarAdmin) {
-        const button = document.createElement('button');
-        button.className = 'del-btn';
-        button.type = 'button';
-        button.textContent = '✕';
-        button.onclick = () => deleteEvent(idx);
-        item.appendChild(button);
-      }
-
-      container.appendChild(item);
-    });
-
-    const divider = document.createElement('div');
-    divider.className = 'divider';
-    container.appendChild(divider);
-  }
-
-  function closeModal(e) {
-    if (e.target === document.getElementById('modalOverlay')) closeModalDirect();
-  }
-  function closeModalDirect() {
-    document.getElementById('modalOverlay').classList.remove('open');
-  }
-
-  function selectColor(c) {
-    selectedColor = c;
-    document.querySelectorAll('.color-dot').forEach(el => el.classList.remove('selected'));
-    document.querySelector(`.color-dot[data-color="${c}"]`).classList.add('selected');
-  }
-
-  async function addEvent() {
-    if (!isCalendarAdmin) {
-      setAuthMessage('กรุณายืนยันรหัสก่อน', 'error');
-      document.getElementById('passcodeInput').focus();
-      return;
-    }
-
-    const title = document.getElementById('eventTitle').value.trim();
-    if (!title) {
-      document.getElementById('eventTitle').focus();
-      return;
-    }
-
-    const time  = document.getElementById('eventTime').value;
-    const key = dateKey(selectedDate.y, selectedDate.m, selectedDate.d);
-    const button = document.getElementById('addEventBtn');
-
-    button.disabled = true;
-    try {
-      const data = await apiJson('/events', {
-        method: 'POST',
-        body: JSON.stringify({ key, title, time, color: selectedColor })
-      });
-      eventsCache = data.events || {};
-      document.getElementById('eventTitle').value = '';
-      document.getElementById('eventTime').value  = '';
-      renderModalEvents();
-      render();
-    } catch (error) {
-      if (error.status === 401) {
-        isCalendarAdmin = false;
-        updateAuthUi();
-      }
-      setAuthMessage(error.message || 'บันทึกกิจกรรมไม่ได้', 'error');
-    } finally {
-      button.disabled = false;
-    }
-  }
-
-  async function deleteEvent(idx) {
-    if (!isCalendarAdmin) return;
-
-    const events = loadEvents();
-    const key = dateKey(selectedDate.y, selectedDate.m, selectedDate.d);
-    const event = (events[key] || [])[idx];
-    if (!event) return;
-
-    try {
-      const data = await apiJson('/events', {
-        method: 'DELETE',
-        body: JSON.stringify({ key, id: event.id, index: idx })
-      });
-      eventsCache = data.events || {};
-      renderModalEvents();
-      render();
-    } catch (error) {
-      if (error.status === 401) {
-        isCalendarAdmin = false;
-        updateAuthUi();
-      }
-      setAuthMessage(error.message || 'ลบกิจกรรมไม่ได้', 'error');
-    }
-  }
-
-  // Enter to add
-  document.addEventListener('keydown', e => {
-    const modalOpen = document.getElementById('modalOverlay').classList.contains('open');
-    if (e.key === 'Enter' && modalOpen) {
-      const active = document.activeElement;
-      if (active && active.tagName === 'BUTTON') return;
-      e.preventDefault();
-      if (!isCalendarAdmin && active && active.id === 'passcodeInput') loginAdmin();
-      else if (isCalendarAdmin) addEvent();
-    }
-    if (e.key === 'Escape') closeModalDirect();
-  });
-
-  async function initCalendar() {
-    render();
-    await Promise.allSettled([checkAuth(), refreshEvents()]);
-  }
-
-  initCalendar();
-</script>
-
 
     <footer>
         powered by <span>E-Ga</span>
     </footer>
-
 </body>
 </html>
