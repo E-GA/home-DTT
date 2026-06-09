@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --orange: #FF6B35;
@@ -284,6 +285,464 @@
 
         .card:nth-child(1) { animation: fadeUp 0.45s ease both; }
         .card:nth-child(2) { animation: fadeUp 0.45s 0.1s ease both; }
+         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #F7F6F2;
+    --surface:   #FFFFFF;
+    --border:    #E2E0D8;
+    --text:      #1A1917;
+    --muted:     #9A9690;
+    --accent:    #3B5BDB;
+    --accent-light: #EEF2FF;
+    --today-bg:  #3B5BDB;
+    --today-fg:  #FFFFFF;
+    --event-1:   #3B5BDB;
+    --event-2:   #0CA678;
+    --event-3:   #F76707;
+    --event-4:   #AE3EC9;
+    --shadow:    0 2px 12px rgba(0,0,0,0.07);
+  }
+
+  body {
+    font-family: 'IBM Plex Sans Thai', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px;
+  }
+
+  .calendar-wrap {
+    width: 100%;
+    max-width: 860px;
+  }
+
+  /* ── Header ── */
+  .cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+
+  .cal-title {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .cal-month {
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  .cal-year {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  .nav-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .nav-btn {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .nav-btn:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+
+  .today-btn {
+    height: 38px;
+    padding: 0 16px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    font-family: 'IBM Plex Sans Thai', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .today-btn:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+
+  /* ── Grid ── */
+  .cal-grid {
+    background: var(--surface);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .day-names {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+
+  .day-name {
+    text-align: center;
+    padding: 12px 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .day-name.weekend { color: #C92A2A; }
+
+  .days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+
+  .day-cell {
+    min-height: 100px;
+    padding: 10px 10px 8px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.12s;
+    position: relative;
+  }
+  .day-cell:nth-child(7n) { border-right: none; }
+  .day-cell:hover { background: var(--accent-light); }
+
+  .day-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+    transition: background 0.12s, color 0.12s;
+  }
+
+  .day-cell.today .day-num {
+    background: var(--today-bg);
+    color: var(--today-fg);
+  }
+
+  .day-cell.other-month .day-num { color: var(--muted); }
+  .day-cell.other-month { background: #FAFAF8; }
+
+  .day-cell.weekend-day .day-num { color: #C92A2A; }
+  .day-cell.today.weekend-day .day-num { color: var(--today-fg); }
+
+  /* ── Events ── */
+  .event-list { display: flex; flex-direction: column; gap: 3px; }
+
+  .event-pill {
+    font-size: 0.72rem;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .event-pill:hover { opacity: 0.8; }
+
+  .event-pill.color-1 { background: #EEF2FF; color: #3B5BDB; }
+  .event-pill.color-2 { background: #E6FCF5; color: #0B7A56; }
+  .event-pill.color-3 { background: #FFF4E6; color: #C45700; }
+  .event-pill.color-4 { background: #F8F0FC; color: #862E9C; }
+
+  .more-events {
+    font-size: 0.68rem;
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    padding-left: 2px;
+    margin-top: 1px;
+  }
+
+  /* ── Modal ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26,25,23,0.4);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    width: 100%;
+    max-width: 420px;
+    overflow: hidden;
+    animation: slideUp 0.22s ease;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(24px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+
+  .modal-header {
+    padding: 22px 24px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .modal-date-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
+  .modal-day-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .modal-close {
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: transparent;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted);
+    font-size: 1rem;
+    transition: background 0.15s;
+  }
+  .modal-close:hover { background: var(--bg); }
+
+  .modal-body { padding: 20px 24px; }
+
+  .auth-panel {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 16px;
+    background: var(--bg);
+  }
+
+  .auth-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+  }
+
+  .auth-btn,
+  .auth-link {
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'IBM Plex Sans Thai', sans-serif;
+    font-weight: 600;
+  }
+
+  .auth-btn {
+    padding: 0 14px;
+    background: var(--text);
+    color: #fff;
+  }
+
+  .auth-link {
+    background: transparent;
+    color: var(--accent);
+    padding: 4px 0;
+  }
+
+  .auth-btn:disabled,
+  .add-btn:disabled,
+  .del-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  .auth-message {
+    min-height: 18px;
+    font-size: 0.76rem;
+    color: var(--muted);
+  }
+
+  .auth-message.error { color: #C92A2A; }
+  .auth-message.success { color: #0B7A56; }
+
+  .auth-state {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 0.86rem;
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  [hidden] { display: none !important; }
+
+  .event-form { display: flex; flex-direction: column; gap: 12px; }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .form-input {
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 9px 13px;
+    font-family: 'IBM Plex Sans Thai', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text);
+    background: var(--bg);
+    transition: border-color 0.15s;
+    outline: none;
+    width: 100%;
+  }
+  .form-input:focus { border-color: var(--accent); background: var(--surface); }
+
+  .color-picker {
+    display: flex;
+    gap: 8px;
+  }
+
+  .color-dot {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .color-dot:hover { transform: scale(1.15); }
+  .color-dot.selected { border-color: var(--text); }
+
+  .c1 { background: var(--event-1); }
+  .c2 { background: var(--event-2); }
+  .c3 { background: var(--event-3); }
+  .c4 { background: var(--event-4); }
+
+  .add-btn {
+    width: 100%;
+    padding: 11px;
+    border-radius: 12px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-family: 'IBM Plex Sans Thai', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-top: 4px;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .add-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .add-btn:active { transform: translateY(0); }
+
+  .existing-events { margin-bottom: 16px; }
+
+  .existing-title {
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .modal-event-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 12px;
+    border-radius: 10px;
+    margin-bottom: 6px;
+    font-size: 0.88rem;
+  }
+
+  .modal-event-item.color-1 { background: #EEF2FF; color: #3B5BDB; }
+  .modal-event-item.color-2 { background: #E6FCF5; color: #0B7A56; }
+  .modal-event-item.color-3 { background: #FFF4E6; color: #C45700; }
+  .modal-event-item.color-4 { background: #F8F0FC; color: #862E9C; }
+
+  .del-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: 0.9rem; opacity: 0.5;
+    transition: opacity 0.15s;
+    padding: 2px 4px;
+  }
+  .del-btn:hover { opacity: 1; }
+
+  .divider {
+    height: 1px; background: var(--border);
+    margin: 16px 0;
+  }
+
+  /* ── Mini legend ── */
+  .legend {
+    display: flex;
+    gap: 16px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+
+  @media (max-width: 600px) {
+    .day-cell { min-height: 64px; padding: 7px 5px 5px; }
+    .day-num  { width: 24px; height: 24px; font-size: 0.75rem; }
+    .cal-month { font-size: 1.4rem; }
+    .event-pill { font-size: 0.65rem; padding: 1px 5px; }
+  }
     </style>
 </head>
 <body>
@@ -367,6 +826,465 @@
 
         </div>
     </main>
+
+    <body>
+
+<div class="calendar-wrap">
+  <div class="cal-header">
+    <div class="cal-title">
+      <div class="cal-month" id="monthLabel"></div>
+      <div class="cal-year" id="yearLabel"></div>
+    </div>
+    <div class="nav-group">
+      <button class="today-btn" onclick="goToday()">วันนี้</button>
+      <button class="nav-btn" onclick="changeMonth(-1)">‹</button>
+      <button class="nav-btn" onclick="changeMonth(1)">›</button>
+    </div>
+  </div>
+
+  <div class="cal-grid">
+    <div class="day-names">
+      <div class="day-name weekend">อา</div>
+      <div class="day-name">จ</div>
+      <div class="day-name">อ</div>
+      <div class="day-name">พ</div>
+      <div class="day-name">พฤ</div>
+      <div class="day-name">ศ</div>
+      <div class="day-name weekend">ส</div>
+    </div>
+    <div class="days-grid" id="daysGrid"></div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#3B5BDB"></div>งาน / Work</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#0CA678"></div>ส่วนตัว</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#F76707"></div>นัดหมาย</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#AE3EC9"></div>อื่นๆ</div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-date-label" id="modalDateLabel"></div>
+        <div class="modal-day-title" id="modalDayTitle"></div>
+      </div>
+      <button class="modal-close" type="button" onclick="closeModalDirect()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="existing-events" id="existingEvents"></div>
+      <div class="auth-panel" id="authPanel">
+        <div class="form-field" id="authForm">
+          <div class="form-label">รหัสผู้จัดกิจกรรม</div>
+          <div class="auth-row">
+            <input class="form-input" id="passcodeInput" type="password" placeholder="กรอกรหัส" autocomplete="current-password" />
+            <button class="auth-btn" id="loginBtn" type="button" onclick="loginAdmin()">ยืนยัน</button>
+          </div>
+          <div class="auth-message" id="authMessage" role="status"></div>
+        </div>
+        <div class="auth-state" id="authState" hidden>
+          <span>โหมดผู้จัดกิจกรรม</span>
+          <button class="auth-link" type="button" onclick="logoutAdmin()">ออก</button>
+        </div>
+      </div>
+      <div class="event-form" id="eventForm" hidden>
+        <div class="form-field">
+          <div class="form-label">ชื่อกิจกรรม</div>
+          <input class="form-input" id="eventTitle" type="text" placeholder="เช่น ประชุมทีม, วันเกิด..." />
+        </div>
+        <div class="form-field">
+          <div class="form-label">เวลา (ไม่บังคับ)</div>
+          <input class="form-input" id="eventTime" type="time" />
+        </div>
+        <div class="form-field">
+          <div class="form-label">สี</div>
+          <div class="color-picker">
+            <div class="color-dot c1 selected" data-color="1" onclick="selectColor(1)"></div>
+            <div class="color-dot c2" data-color="2" onclick="selectColor(2)"></div>
+            <div class="color-dot c3" data-color="3" onclick="selectColor(3)"></div>
+            <div class="color-dot c4" data-color="4" onclick="selectColor(4)"></div>
+          </div>
+        </div>
+        <button class="add-btn" id="addEventBtn" type="button" onclick="addEvent()">+ เพิ่มกิจกรรม</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const MONTHS_TH = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน',
+                     'กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+  const DAYS_EN   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const API_BASE   = '/api';
+
+  let current   = new Date();
+  let viewYear  = current.getFullYear();
+  let viewMonth = current.getMonth();
+  let selectedDate = null;
+  let selectedColor = 1;
+  let eventsCache = {};
+  let isCalendarAdmin = false;
+
+  function loadEvents() {
+    return eventsCache;
+  }
+
+  function dateKey(y, m, d) {
+    return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  }
+
+  async function apiJson(path, options = {}) {
+    const init = { credentials: 'same-origin', ...options };
+    if (init.body && !(init.body instanceof FormData)) {
+      init.headers = { 'Content-Type': 'application/json', ...(init.headers || {}) };
+    }
+
+    const response = await fetch(`${API_BASE}${path}`, init);
+    let data = {};
+    try { data = await response.json(); } catch {}
+
+    if (!response.ok) {
+      const error = new Error(data.error || 'เกิดข้อผิดพลาด');
+      error.status = response.status;
+      throw error;
+    }
+    return data;
+  }
+
+  function setAuthMessage(text, type = '') {
+    const el = document.getElementById('authMessage');
+    if (!el) return;
+    el.textContent = text || '';
+    el.className = `auth-message${type ? ' ' + type : ''}`;
+  }
+
+  function updateAuthUi() {
+    const authForm = document.getElementById('authForm');
+    const authState = document.getElementById('authState');
+    const eventForm = document.getElementById('eventForm');
+
+    if (authForm) authForm.hidden = isCalendarAdmin;
+    if (authState) authState.hidden = !isCalendarAdmin;
+    if (eventForm) eventForm.hidden = !isCalendarAdmin;
+    if (!isCalendarAdmin) setAuthMessage('', '');
+    if (selectedDate) renderModalEvents();
+  }
+
+  async function refreshEvents() {
+    try {
+      const data = await apiJson('/events', { cache: 'no-store' });
+      eventsCache = data.events || {};
+      render();
+    } catch (error) {
+      eventsCache = {};
+      render();
+      setAuthMessage('เชื่อมต่อระบบบันทึกกิจกรรมไม่ได้', 'error');
+    }
+  }
+
+  async function checkAuth() {
+    try {
+      const data = await apiJson('/auth', { cache: 'no-store' });
+      isCalendarAdmin = !!data.authenticated;
+    } catch {
+      isCalendarAdmin = false;
+    }
+    updateAuthUi();
+  }
+
+  async function loginAdmin() {
+    const input = document.getElementById('passcodeInput');
+    const button = document.getElementById('loginBtn');
+    const code = input.value.trim();
+
+    if (!code) {
+      setAuthMessage('กรุณากรอกรหัส', 'error');
+      input.focus();
+      return;
+    }
+
+    button.disabled = true;
+    setAuthMessage('กำลังตรวจสอบ...', '');
+
+    try {
+      await apiJson('/login', {
+        method: 'POST',
+        body: JSON.stringify({ code })
+      });
+      isCalendarAdmin = true;
+      input.value = '';
+      updateAuthUi();
+      setTimeout(() => document.getElementById('eventTitle').focus(), 50);
+    } catch (error) {
+      isCalendarAdmin = false;
+      setAuthMessage(error.message || 'รหัสไม่ถูกต้อง', 'error');
+      input.focus();
+    } finally {
+      button.disabled = false;
+    }
+  }
+
+  async function logoutAdmin() {
+    try {
+      await apiJson('/logout', { method: 'POST' });
+    } catch {}
+
+    isCalendarAdmin = false;
+    updateAuthUi();
+    setTimeout(() => document.getElementById('passcodeInput').focus(), 50);
+  }
+
+  // ── Render ──────────────────────────────────────────
+  function render() {
+    const events = loadEvents();
+
+    document.getElementById('monthLabel').textContent = MONTHS_TH[viewMonth];
+    document.getElementById('yearLabel').textContent  = `${viewYear + 543}  ·  ${viewYear}`;
+
+    const grid  = document.getElementById('daysGrid');
+    grid.innerHTML = '';
+
+    const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+    const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+    const daysInPrev  = new Date(viewYear, viewMonth, 0).getDate();
+
+    const total = Math.ceil((firstDay + daysInMonth) / 7) * 7;
+
+    for (let i = 0; i < total; i++) {
+      let day, month, year, isOther = false;
+
+      if (i < firstDay) {
+        day = daysInPrev - firstDay + 1 + i;
+        month = viewMonth - 1; year = viewYear;
+        if (month < 0) { month = 11; year--; }
+        isOther = true;
+      } else if (i >= firstDay + daysInMonth) {
+        day = i - firstDay - daysInMonth + 1;
+        month = viewMonth + 1; year = viewYear;
+        if (month > 11) { month = 0; year++; }
+        isOther = true;
+      } else {
+        day = i - firstDay + 1;
+        month = viewMonth; year = viewYear;
+      }
+
+      const isToday = (day === current.getDate() && month === current.getMonth() && year === current.getFullYear());
+      const dow = (i % 7);
+      const isWeekend = dow === 0 || dow === 6;
+
+      const cell = document.createElement('div');
+      cell.className = 'day-cell' +
+        (isOther   ? ' other-month' : '') +
+        (isToday   ? ' today'       : '') +
+        (isWeekend ? ' weekend-day' : '');
+
+      cell.innerHTML = `<div class="day-num">${day}</div><div class="event-list" id="el-${year}-${month}-${day}"></div>`;
+
+      const _y = year, _m = month, _d = day;
+      cell.onclick = () => openModal(_y, _m, _d);
+      grid.appendChild(cell);
+
+      // Render events
+      const key = dateKey(year, month, day);
+      const dayEvents = events[key] || [];
+      const evList = cell.querySelector('.event-list');
+      const maxShow = 2;
+      dayEvents.slice(0, maxShow).forEach(ev => {
+        const pill = document.createElement('div');
+        pill.className = `event-pill color-${ev.color || 1}`;
+        pill.textContent = (ev.time ? ev.time + ' ' : '') + ev.title;
+        pill.onclick = (e) => { e.stopPropagation(); openModal(_y, _m, _d); };
+        evList.appendChild(pill);
+      });
+      if (dayEvents.length > maxShow) {
+        const more = document.createElement('div');
+        more.className = 'more-events';
+        more.textContent = `+${dayEvents.length - maxShow} อื่นๆ`;
+        evList.appendChild(more);
+      }
+    }
+  }
+
+  // ── Navigation ──────────────────────────────────────
+  function changeMonth(dir) {
+    viewMonth += dir;
+    if (viewMonth > 11) { viewMonth = 0;  viewYear++; }
+    if (viewMonth < 0)  { viewMonth = 11; viewYear--; }
+    render();
+  }
+  function goToday() {
+    viewYear = current.getFullYear();
+    viewMonth = current.getMonth();
+    render();
+  }
+
+  // ── Modal ───────────────────────────────────────────
+  function openModal(y, m, d) {
+    selectedDate = { y, m, d };
+    selectedColor = 1;
+
+    const thDay = ['วันอาทิตย์','วันจันทร์','วันอังคาร','วันพุธ','วันพฤหัสบดี','วันศุกร์','วันเสาร์'];
+    const dow = new Date(y, m, d).getDay();
+
+    document.getElementById('modalDateLabel').textContent =
+      `${String(d).padStart(2,'0')} ${MONTHS_TH[m]} ${y + 543}`;
+    document.getElementById('modalDayTitle').textContent = thDay[dow];
+
+    document.getElementById('eventTitle').value = '';
+    document.getElementById('eventTime').value  = '';
+    document.querySelectorAll('.color-dot').forEach(el => el.classList.remove('selected'));
+    document.querySelector('.color-dot[data-color="1"]').classList.add('selected');
+
+    updateAuthUi();
+    renderModalEvents();
+    document.getElementById('modalOverlay').classList.add('open');
+    setTimeout(() => {
+      const target = isCalendarAdmin ? 'eventTitle' : 'passcodeInput';
+      document.getElementById(target).focus();
+    }, 50);
+  }
+
+  function renderModalEvents() {
+    const events = loadEvents();
+    const key = dateKey(selectedDate.y, selectedDate.m, selectedDate.d);
+    const dayEvents = events[key] || [];
+    const container = document.getElementById('existingEvents');
+    container.innerHTML = '';
+
+    if (dayEvents.length === 0) {
+      return;
+    }
+
+    const title = document.createElement('div');
+    title.className = 'existing-title';
+    title.textContent = 'กิจกรรมในวันนี้';
+    container.appendChild(title);
+
+    dayEvents.forEach((ev, idx) => {
+      const item = document.createElement('div');
+      item.className = `modal-event-item color-${ev.color || 1}`;
+
+      const text = document.createElement('span');
+      text.textContent = `${ev.time ? ev.time + ' · ' : ''}${ev.title}`;
+      item.appendChild(text);
+
+      if (isCalendarAdmin) {
+        const button = document.createElement('button');
+        button.className = 'del-btn';
+        button.type = 'button';
+        button.textContent = '✕';
+        button.onclick = () => deleteEvent(idx);
+        item.appendChild(button);
+      }
+
+      container.appendChild(item);
+    });
+
+    const divider = document.createElement('div');
+    divider.className = 'divider';
+    container.appendChild(divider);
+  }
+
+  function closeModal(e) {
+    if (e.target === document.getElementById('modalOverlay')) closeModalDirect();
+  }
+  function closeModalDirect() {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+
+  function selectColor(c) {
+    selectedColor = c;
+    document.querySelectorAll('.color-dot').forEach(el => el.classList.remove('selected'));
+    document.querySelector(`.color-dot[data-color="${c}"]`).classList.add('selected');
+  }
+
+  async function addEvent() {
+    if (!isCalendarAdmin) {
+      setAuthMessage('กรุณายืนยันรหัสก่อน', 'error');
+      document.getElementById('passcodeInput').focus();
+      return;
+    }
+
+    const title = document.getElementById('eventTitle').value.trim();
+    if (!title) {
+      document.getElementById('eventTitle').focus();
+      return;
+    }
+
+    const time  = document.getElementById('eventTime').value;
+    const key = dateKey(selectedDate.y, selectedDate.m, selectedDate.d);
+    const button = document.getElementById('addEventBtn');
+
+    button.disabled = true;
+    try {
+      const data = await apiJson('/events', {
+        method: 'POST',
+        body: JSON.stringify({ key, title, time, color: selectedColor })
+      });
+      eventsCache = data.events || {};
+      document.getElementById('eventTitle').value = '';
+      document.getElementById('eventTime').value  = '';
+      renderModalEvents();
+      render();
+    } catch (error) {
+      if (error.status === 401) {
+        isCalendarAdmin = false;
+        updateAuthUi();
+      }
+      setAuthMessage(error.message || 'บันทึกกิจกรรมไม่ได้', 'error');
+    } finally {
+      button.disabled = false;
+    }
+  }
+
+  async function deleteEvent(idx) {
+    if (!isCalendarAdmin) return;
+
+    const events = loadEvents();
+    const key = dateKey(selectedDate.y, selectedDate.m, selectedDate.d);
+    const event = (events[key] || [])[idx];
+    if (!event) return;
+
+    try {
+      const data = await apiJson('/events', {
+        method: 'DELETE',
+        body: JSON.stringify({ key, id: event.id, index: idx })
+      });
+      eventsCache = data.events || {};
+      renderModalEvents();
+      render();
+    } catch (error) {
+      if (error.status === 401) {
+        isCalendarAdmin = false;
+        updateAuthUi();
+      }
+      setAuthMessage(error.message || 'ลบกิจกรรมไม่ได้', 'error');
+    }
+  }
+
+  // Enter to add
+  document.addEventListener('keydown', e => {
+    const modalOpen = document.getElementById('modalOverlay').classList.contains('open');
+    if (e.key === 'Enter' && modalOpen) {
+      const active = document.activeElement;
+      if (active && active.tagName === 'BUTTON') return;
+      e.preventDefault();
+      if (!isCalendarAdmin && active && active.id === 'passcodeInput') loginAdmin();
+      else if (isCalendarAdmin) addEvent();
+    }
+    if (e.key === 'Escape') closeModalDirect();
+  });
+
+  async function initCalendar() {
+    render();
+    await Promise.allSettled([checkAuth(), refreshEvents()]);
+  }
+
+  initCalendar();
+</script>
+
 
     <footer>
         powered by <span>E-Ga</span>
