@@ -80,31 +80,58 @@
 
   .header-stats {
     display: flex;
+    align-items: center;
+    justify-content: flex-end;
     gap: 12px;
   }
 
-  .stat-item {
-    text-align: center;
-    background: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.92);
-    border-radius: 14px;
-    min-width: 112px;
-    padding: 13px 16px;
-    box-shadow: 0 12px 24px rgba(78, 121, 160, 0.14);
+  .learning-hours-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    border-radius: 999px;
+    padding: 10px 18px 10px 10px;
+    box-shadow: 0 16px 30px rgba(78, 121, 160, 0.16);
   }
 
-  .stat-num {
+  .learning-hours-circle {
+    width: 86px;
+    height: 86px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background:
+      linear-gradient(#fff, #fff) padding-box,
+      conic-gradient(var(--accent), var(--accent2), var(--progress), var(--accent)) border-box;
+    border: 7px solid transparent;
+    box-shadow: inset 0 0 0 1px rgba(47, 128, 237, 0.12);
+  }
+
+  .learning-hours-num {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 2rem;
+    font-size: 2.05rem;
     font-weight: 500;
-    color: var(--text);
+    color: var(--accent);
     line-height: 1;
   }
 
-  .stat-label {
-    font-size: 0.9rem;
+  .learning-hours-copy {
+    min-width: 0;
+  }
+
+  .learning-hours-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.25;
+  }
+
+  .learning-hours-unit {
+    font-size: 0.86rem;
     color: var(--muted);
-    margin-top: 6px;
+    margin-top: 4px;
   }
 
   /* ── Grid ── */
@@ -399,6 +426,32 @@
   .eval-badge.understand { background: #FFF7E6; color: var(--progress); }
   .eval-badge.can-do { background: #E6F9F0; color: var(--done); }
 
+  .eval-stars {
+    --star-color: var(--progress);
+    display: inline-flex;
+    align-items: center;
+    gap: 1px;
+    min-width: 7.25rem;
+    color: #C7D6E4;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .eval-stars.not-understand { --star-color: var(--new); }
+  .eval-stars.understand { --star-color: var(--progress); }
+  .eval-stars.can-do { --star-color: var(--done); }
+  .eval-stars.pending { opacity: 0.5; }
+
+  .eval-stars .star {
+    display: inline-block;
+    width: 0.72rem;
+    font-size: 1rem;
+  }
+
+  .eval-stars .star.filled {
+    color: var(--star-color);
+  }
+
 
   /* ── Responsive ── */
   @media (max-width: 860px) {
@@ -414,8 +467,10 @@
       max-width: calc(100vw - 28px);
     }
     .page-header { margin-bottom: 18px; }
-    .header-stats { width: 100%; }
-    .stat-item { flex: 1; min-width: 0; }
+    .header-stats { width: 100%; justify-content: center; }
+    .learning-hours-card { width: 100%; max-width: 340px; justify-content: center; }
+    .learning-hours-circle { width: 76px; height: 76px; }
+    .learning-hours-num { font-size: 1.75rem; }
     .cards-grid { grid-template-columns: 1fr; gap: 12px; }
     .card { min-height: 0; padding: 18px 16px; gap: 12px; }
     .avatar { width: 54px; height: 54px; border-radius: 14px; }
@@ -424,6 +479,8 @@
     .modal-header { padding: 16px; }
     .modal-body { padding: 16px; }
     .detail-table th, .detail-table td { padding: 10px 8px; font-size: 0.85rem; }
+    .eval-stars { min-width: 5.8rem; gap: 0; }
+    .eval-stars .star { width: 0.58rem; font-size: 0.78rem; }
   }
 </style>
 </head>
@@ -433,15 +490,16 @@
   <div class="header-left">
     <h1 class="page-title">ดูสถานะของคุณ.</h1>
   </div>
-  <div class="header-stats">
-    <!-- <div class="stat-item">
-      <div class="stat-num" id="doneCount">0</div>
-      <div class="stat-label">เสร็จแล้ว</div>
-    </div> -->
-    <!-- <div class="stat-item">
-      <div class="stat-num" id="inProgressCount">0</div>
-      <div class="stat-label">กำลังเรียน</div>
-    </div> -->
+  <div class="header-stats" aria-label="ชั่วโมงการเรียนรู้">
+    <div class="learning-hours-card">
+      <div class="learning-hours-circle">
+        <div class="learning-hours-num" id="learningHours">0</div>
+      </div>
+      <div class="learning-hours-copy">
+        <div class="learning-hours-label">ชั่วโมง</div>
+        <div class="learning-hours-unit">ที่ให้ความรู้ไปแล้ว</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -467,7 +525,7 @@
         <thead>
           <tr>
             <th>เนื้อหาที่ศึกษา</th>
-            <th style="width: 160px;">ผลการประเมินการรับรู้</th>
+            <th style="width: 160px;">ผลการประเมิน</th>
           </tr>
         </thead>
         <tbody id="modalTableBody">
@@ -497,7 +555,7 @@
     },
     {
       id: 2,
-      name: "จอรสบรูช",
+      name: "จอรสบรูช",  
       topic: "วิทย์+คณิต",
       pct: 10 ,
       status: "progress",
@@ -507,12 +565,12 @@
       subTopics: [
         { title: "เรื่องที่ไปของขยะในมือเรา", evaluation: "เข้าใจ" },
         { title: "การสังเกต", evaluation: "เข้าใจ" },
-        // { title: "Asynchronous JavaScript (Promises/Fetch)", evaluation: "ไม่เข้าใจ" }
+        { "title": "<a href='https://e-ga.github.io/hft-ega/dashboard.html'>ตรวจสอบเช็คการกิน'กดที่นี่'</a> ", "evaluation": "" }
       ]
     },
     {
       id: 3,
-      name: "มะลิ",
+      name: "มะลิ .. รอการยืนยัน" ,
       topic: "วิทย์+คณิต",
       pct: 0,
       status: "progress",
@@ -527,7 +585,7 @@
     },
     {
       id: 4,
-      name: "วีด้า",
+      name: "วีด้า.. รอการยืนยัน",
       topic: "วิทย์+คณิต",
       pct: 0 ,
       status: "done",
@@ -542,7 +600,7 @@
     },
     {
       id: 5,
-      name: "พัดเตอร์",
+      name: "พัดเตอร์.. รอการยืนยัน",
       topic: "วิทย์+คณิต",
       pct: 0,
       status: "progress",
@@ -603,6 +661,54 @@
   ];
 
   const statusLabel = { done: "ความคืบหน้า", progress: "ความคืบหน้า", new: "ความคืบหน้า" };
+  const learningHours = 14; 
+
+  function renderLearningHours() {
+    const hourElement = document.getElementById('learningHours');
+    if (hourElement) hourElement.textContent = learningHours;
+  }
+
+  function escapeAttr(value) {
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
+  function getEvaluationRating(evaluation) {
+    const label = (evaluation || '').trim();
+
+    if (!label) {
+      return { score: 0, className: 'pending', label: 'ยังไม่มีผลประเมิน' };
+    }
+
+    if (label.includes('ทำได้')) {
+      return { score: 10, className: 'can-do', label };
+    }
+
+    if (label.includes('ไม่เข้าใจ')) {
+      return { score: 3, className: 'not-understand', label };
+    }
+
+    if (label.includes('เข้าใจ')) {
+      return { score: 7, className: 'understand', label };
+    }
+
+    return { score: 0, className: 'pending', label };
+  }
+
+  function renderEvaluationStars(evaluation) {
+    const rating = getEvaluationRating(evaluation);
+    const title = `${rating.label} ${rating.score}/10`;
+    const ariaLabel = `${rating.label} ${rating.score} จาก 10 ดาว`;
+    const stars = Array.from({ length: 10 }, (_, index) => {
+      const filled = index < rating.score;
+      return `<span class="star ${filled ? 'filled' : ''}" aria-hidden="true">${filled ? '&#9733;' : '&#9734;'}</span>`;
+    }).join('');
+
+    return `<span class="eval-stars ${rating.className}" title="${escapeAttr(title)}" aria-label="${escapeAttr(ariaLabel)}">${stars}</span>`;
+  }
 
   function renderCards() {
     const grid = document.getElementById('cardsGrid');
@@ -645,11 +751,7 @@
       }, 120);
     });
 
-    // Update header stats
-    const done = people.filter(p => p.status === 'done').length;
-    const inProg = people.filter(p => p.status === 'progress').length;
-    document.getElementById('doneCount').textContent = done;
-    document.getElementById('inProgressCount').textContent = inProg;
+    renderLearningHours();
   }
 
   // ── New: Functions Control Modal ──
@@ -681,14 +783,9 @@
     person.subTopics.forEach(sub => {
       const tr = document.createElement('tr');
       
-      // เลือกคลาสของ Badge ตามผลการประเมิน
-      let evalClass = 'understand';
-      if (sub.evaluation === 'ไม่เข้าใจ') evalClass = 'not-understand';
-      if (sub.evaluation === 'ทำได้') evalClass = 'can-do';
-
       tr.innerHTML = `
         <td>${sub.title}</td>
-        <td><span class="eval-badge ${evalClass}">${sub.evaluation}</span></td>
+        <td>${renderEvaluationStars(sub.evaluation)}</td>
       `;
       tbody.appendChild(tr);
     });
