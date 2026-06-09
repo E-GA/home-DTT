@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ความคืบหน้าการเรียนรู้</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #F7FBFF;
+    --surface:   #FFFFFF;
+    --surface2:  #EAF5FF;
+    --border:    #D5E7F7;
+    --text:      #19324D;
+    --muted:     #657B91;
+    --accent:    #2F80ED;
+    --accent2:   #00B8A9;
+    --done:      #19B978;
+    --progress:  #F6B73C;
+    --new:       #FF6B8A;
+    --shadow:    rgba(71, 102, 132, 0.18);
+  }
+
+  body {
+    font-family: 'IBM Plex Sans Thai', sans-serif;
+    background:
+      radial-gradient(circle at 15% 18%, rgba(255, 222, 89, 0.32), transparent 26%),
+      radial-gradient(circle at 86% 14%, rgba(86, 207, 225, 0.34), transparent 25%),
+      linear-gradient(135deg, #FFF8D7 0%, #EFF9FF 46%, #F7F1FF 100%);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+  }
+
+  /* ── Header ── */
+  .page-header {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .header-left {
+    min-width: 260px;
+  }
+
+  .header-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .page-title {
+    font-size: clamp(2.4rem, 4vw, 4.2rem);
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1.1;
+  }
+
+  .page-title span {
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .header-stats {
+    display: flex;
+    gap: 12px;
+  }
+
+  .stat-item {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.92);
+    border-radius: 14px;
+    min-width: 112px;
+    padding: 13px 16px;
+    box-shadow: 0 12px 24px rgba(78, 121, 160, 0.14);
+  }
+
+  .stat-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 2rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  /* ── Grid ── */
+  .cards-grid {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, minmax(150px, auto));
+    gap: 18px;
+    min-width: 0;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    border-radius: 18px;
+    padding: 22px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    cursor: pointer;
+    transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s, background 0.18s;
+    position: relative;
+    overflow: hidden;
+    min-height: 150px;
+    min-width: 0;
+    max-width: 100%;
+    box-shadow: 0 18px 36px var(--shadow);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--card-accent, var(--accent)) 0%, transparent 58%);
+    opacity: 0.1;
+    transition: opacity 0.2s;
+    border-radius: inherit;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    background: #fff;
+    box-shadow: 0 22px 44px rgba(71, 102, 132, 0.24);
+    border-color: var(--card-accent, var(--accent));
+  }
+
+  .card:hover::before { opacity: 0.18; }
+
+  /* ── Avatar ── */
+  .avatar {
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+    background: var(--surface2);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.86);
+  }
+
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Fallback avatar with initials */
+  .avatar-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: #fff;
+    background: var(--card-accent, var(--accent));
+    user-select: none;
+  }
+
+  /* Status dot */
+  .status-dot {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    background: var(--muted);
+  }
+  .status-dot.done     { background: var(--done); }
+  .status-dot.progress { background: var(--progress); }
+  .status-dot.new      { background: var(--new); }
+
+  /* ── Info ── */
+  .card-info {
+    flex: 1 1 0;
+    width: 0;
+    min-width: 0;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .card-name {
+    font-size: 1.12rem;
+    font-weight: 600;
+    color: var(--text);
+    white-space: normal;
+    overflow: hidden;
+    line-height: 1.25;
+    margin-bottom: 6px;
+  }
+
+  .card-topic {
+    font-size: 0.92rem;
+    color: var(--muted);
+    white-space: normal;
+    overflow: hidden;
+    line-height: 1.35;
+    margin-bottom: 16px;
+  }
+
+  /* Progress bar */
+  .progress-wrap {
+    height: 8px;
+    background: #E1EDF8;
+    border-radius: 99px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+
+  .progress-bar {
+    height: 100%;
+    border-radius: 99px;
+    background: var(--card-accent, var(--accent));
+    transition: width 0.6s ease;
+  }
+
+  .progress-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .progress-pct {
+    color: var(--card-accent, var(--accent));
+    font-weight: 500;
+  }
+
+  /* ── New: Modal Style ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(25, 50, 77, 0.4);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    padding: 20px;
+  }
+
+  .modal-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal-container {
+    background: var(--surface);
+    border-radius: 24px;
+    width: 100%;
+    max-width: 650px;
+    box-shadow: 0 24px 50px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    transform: translateY(30px);
+    transition: transform 0.3s ease;
+    border: 1px solid var(--border);
+  }
+
+  .modal-overlay.active .modal-container {
+    transform: translateY(0);
+  }
+
+  .modal-header {
+    background: var(--surface2);
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .modal-profile {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .modal-title h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .modal-title p {
+    font-size: 0.95rem;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .close-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--muted);
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+
+  .close-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text);
+  }
+
+  .modal-body {
+    padding: 24px;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  /* ── Table Style ── */
+  .detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    text-align: left;
+  }
+
+  .detail-table th, .detail-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.95rem;
+  }
+
+  .detail-table th {
+    background: #F4F9FF;
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .detail-table th:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+  }
+  .detail-table th:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+
+  .detail-table td {
+    color: var(--text);
+  }
+
+  /* Badge Evaluation Status */
+  .eval-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  .eval-badge.not-understand { background: #FFEDF1; color: var(--new); }
+  .eval-badge.understand { background: #FFF7E6; color: var(--progress); }
+  .eval-badge.can-do { background: #E6F9F0; color: var(--done); }
+
+
+  /* ── Responsive ── */
+  @media (max-width: 860px) {
+    .cards-grid { grid-template-columns: repeat(2, 1fr); }
+    body { justify-content: flex-start; }
+  }
+
+  @media (max-width: 480px) {
+    body { padding: 22px 14px; }
+    .page-header,
+    .cards-grid {
+      width: 100%;
+      max-width: calc(100vw - 28px);
+    }
+    .page-header { margin-bottom: 18px; }
+    .header-stats { width: 100%; }
+    .stat-item { flex: 1; min-width: 0; }
+    .cards-grid { grid-template-columns: 1fr; gap: 12px; }
+    .card { min-height: 0; padding: 18px 16px; gap: 12px; }
+    .avatar { width: 54px; height: 54px; border-radius: 14px; }
+    .card-name { font-size: 1rem; }
+    .progress-label { justify-content: flex-start; }
+    .modal-header { padding: 16px; }
+    .modal-body { padding: 16px; }
+    .detail-table th, .detail-table td { padding: 10px 8px; font-size: 0.85rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="header-left">
+    <h1 class="page-title">ดูสถานะของคุณ.</h1>
+  </div>
+  <div class="header-stats">
+    <div class="stat-item">
+      <div class="stat-num" id="doneCount">0</div>
+      <div class="stat-label">เสร็จแล้ว</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="inProgressCount">0</div>
+      <div class="stat-label">กำลังเรียน</div>
+    </div>
+  </div>
+</div>
+
+<div class="cards-grid" id="cardsGrid"></div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-container" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-profile">
+        <div class="avatar" id="modalAvatarWrap">
+          <img id="modalAvatar" src="" alt="">
+          <div id="modalFallback" class="avatar-fallback" style="display:none"></div>
+        </div>
+        <div class="modal-title">
+          <h3 id="modalName">ชื่อ ผู้ใช้งาน</h3>
+          <p id="modalTopic">หัวข้อที่กำลังศึกษา</p>
+        </div>
+      </div>
+      <button class="close-btn" onclick="closeModal(forced=true)">&times;</button>
+    </div>
+    <div class="modal-body">
+      <table class="detail-table">
+        <thead>
+          <tr>
+            <th>เนื้อหาที่ศึกษา</th>
+            <th style="width: 160px;">ผลการประเมินการรับรู้</th>
+          </tr>
+        </thead>
+        <tbody id="modalTableBody">
+          </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  // เพิ่ม subTopics เพื่อนำไปแสดงในตารางรายละเอียดแยกตามรายบุคคล
+  const people = [
+    {
+      id: 1,
+      name: "บอล",
+      topic: "ใช้ชีวิตพืนฐานภาษาไทย",
+      pct: 10,
+      status: "done",
+      accent: "#6C8EF5",
+      avatar: "https://api.dicebear.com/8.x/thumbs/svg?seed=siriporn&backgroundColor=6C8EF5",
+      initials: "ศว",
+      subTopics: [
+        { title: "การใช้ชีวิต-เรื่องเวลา", evaluation: "ไม่เข้าใจพอ" },
+        { title: "อ่านภาษาไทย", evaluation: "กำลังประเมิน" },
+        // { title: "Flexbox & Grid Layouts", evaluation: "ทำได้" }
+      ]
+    },
+    {
+      id: 2,
+      name: "จอรสบรูช",
+      topic: "วิทย์+คณิต",
+      pct: 10 ,
+      status: "progress",
+      accent: "#F7C948",
+      avatar: "https://api.dicebear.com/8.x/thumbs/svg?seed=thanakorn&backgroundColor=F7C948",
+      initials: "ธพ",
+      subTopics: [
+        { title: "เรื่องที่ไปของขยะในมือเรา", evaluation: "เข้าใจ" },
+        { title: "การสังเกต", evaluation: "เข้าใจ" },
+        // { title: "Asynchronous JavaScript (Promises/Fetch)", evaluation: "ไม่เข้าใจ" }
+      ]
+    },
+    {
+      id: 3,
+      name: "มะลิ",
+      topic: "วิทย์+คณิต",
+      pct: 0,
+      status: "progress",
+      accent: "#4ECDC4",
+      avatar: "https://api.dicebear.com/8.x/thumbs/svg?seed=naphatson&backgroundColor=4ECDC4",
+      initials: "นด",
+      subTopics: [
+        // { title: "JSX & Props", evaluation: "ทำได้" },
+        // { title: "useState & useEffect", evaluation: "เข้าใจ" },
+        // { title: "State Management (Context API)", evaluation: "ไม่เข้าใจ" }
+      ]
+    },
+    {
+      id: 4,
+      name: "วีด้า",
+      topic: "วิทย์+คณิต",
+      pct: 0 ,
+      status: "done",
+      accent: "#3DDC97",
+      avatar: "https://api.dicebear.com/8.x/thumbs/svg?seed=kritsana&backgroundColor=3DDC97",
+      initials: "กอ",
+      subTopics: [
+        // { title: "Express.js Setup", evaluation: "ทำได้" },
+        // { title: "Routing & Middleware", evaluation: "ทำได้" },
+        // { title: "JWT Authentication", evaluation: "เข้าใจ" }
+      ]
+    },
+    {
+      id: 5,
+      name: "พัดเตอร์",
+      topic: "วิทย์+คณิต",
+      pct: 0,
+      status: "progress",
+      accent: "#F76F8E",
+      avatar: "https://api.dicebear.com/8.x/thumbs/svg?seed=pimchanok&backgroundColor=F76F8E",
+      initials: "พแ",
+      subTopics: [
+        // { title: "Typography & Color Theory", evaluation: "เข้าใจ" },
+        // { title: "Component Library Design", evaluation: "ไม่เข้าใจ" },
+        // { title: "Prototyping in Figma", evaluation: "เข้าใจ" }
+      ]
+    },
+    // {
+    //   id: 6,
+    //   name: "วรรณพร ทองคำ",
+    //   topic: "Database & SQL",
+    //   pct: 67,
+    //   status: "progress",
+    //   accent: "#A78BFA",
+    //   avatar: "https://api.dicebear.com/8.x/thumbs/svg?seed=wannaporn&backgroundColor=A78BFA",
+    //   initials: "วท",
+    //   subTopics: [
+    //     { title: "Database Normalization", evaluation: "ทำได้" },
+    //     { title: "CRUD Operations (SQL)", evaluation: "เข้าใจ" },
+    //     { title: "Joins & Subqueries", evaluation: "ไม่เข้าใจ" }
+    //   ]
+    // },
+    // {
+    //   id: 7,
+    //   name: "ปรีชา หาญกล้า",
+    //   topic: "Python for Data",
+    //   pct: 12,
+    //   status: "new",
+    //   accent: "#FB923C",
+    //   avatar: "https://api.dicebear.com/8.x/thumbs/svg?seed=precha&backgroundColor=FB923C",
+    //   initials: "ปห",
+    //   subTopics: [
+    //     { title: "Python Syntax & Loops", evaluation: "เข้าใจ" },
+    //     { title: "Pandas DataFrames", evaluation: "ไม่เข้าใจ" },
+    //     { title: "Data Visualization (Matplotlib)", evaluation: "ไม่เข้าใจ" }
+    //   ]
+    // },
+    // {
+    //   id: 8,
+    //   name: "มณีรัตน์ สุขใส",
+    //   topic: "Cloud & Deployment",
+    //   pct: 88,
+    //   status: "done",
+    //   accent: "#38BDF8",
+    //   avatar: "https://api.dicebear.com/8.x/thumbs/svg?seed=maneerat&backgroundColor=38BDF8",
+    //   initials: "มส",
+    //   subTopics: [
+    //     { title: "Docker Containerization", evaluation: "ทำได้" },
+    //     { title: "CI/CD Pipelines", evaluation: "ทำได้" },
+    //     { title: "AWS EC2 Deployment", evaluation: "เข้าใจ" }
+    //   ]
+    // }
+  ];
+
+  const statusLabel = { done: "ความคืบหน้า", progress: "ความคืบหน้า", new: "ความคืบหน้า" };
+
+  function renderCards() {
+    const grid = document.getElementById('cardsGrid');
+
+    people.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.style.setProperty('--card-accent', p.accent);
+      // ผูก Event Click เข้ากับเปิดหน้าต่างรายละเอียด
+      card.onclick = () => openModal(p);
+
+      card.innerHTML = `
+        <div class="avatar">
+          <img src="${p.avatar}" alt="${p.name}"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+          <div class="avatar-fallback" style="display:none">${p.initials}</div>
+          <div class="status-dot ${p.status}"></div>
+        </div>
+        <div class="card-info">
+          <div class="card-name">${p.name}</div>
+          <div class="card-topic">${p.topic}</div>
+          <div class="progress-wrap">
+            <div class="progress-bar" style="width:0%" data-pct="${p.pct}"></div>
+          </div>
+          <div class="progress-label">
+            <span>${statusLabel[p.status]}</span>
+            <span class="progress-pct">${p.pct}%</span>
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    // Animate bars after render
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        document.querySelectorAll('.progress-bar').forEach(bar => {
+          bar.style.width = bar.dataset.pct + '%';
+        });
+      }, 120);
+    });
+
+    // Update header stats
+    const done = people.filter(p => p.status === 'done').length;
+    const inProg = people.filter(p => p.status === 'progress').length;
+    document.getElementById('doneCount').textContent = done;
+    document.getElementById('inProgressCount').textContent = inProg;
+  }
+
+  // ── New: Functions Control Modal ──
+  function openModal(person) {
+    const overlay = document.getElementById('modalOverlay');
+    const modalImg = document.getElementById('modalAvatar');
+    const modalFallback = document.getElementById('modalFallback');
+    
+    // ตั้งค่าโปรไฟล์ใน Modal
+    document.getElementById('modalName').textContent = person.name;
+    document.getElementById('modalTopic').textContent = person.topic;
+    
+    // จัดการรูปภาพ Avatar ใน Modal
+    modalImg.src = person.avatar;
+    modalImg.style.display = 'block';
+    modalFallback.style.display = 'none';
+    modalFallback.textContent = person.initials;
+    modalFallback.style.background = person.accent;
+    
+    modalImg.onerror = function() {
+      this.style.display = 'none';
+      modalFallback.style.display = 'flex';
+    };
+
+    // สร้างแถวข้อมูลตาราง 2 คอลัมน์
+    const tbody = document.getElementById('modalTableBody');
+    tbody.innerHTML = ''; // เคลียร์ข้อมูลเก่าออกก่อน
+    
+    person.subTopics.forEach(sub => {
+      const tr = document.createElement('tr');
+      
+      // เลือกคลาสของ Badge ตามผลการประเมิน
+      let evalClass = 'understand';
+      if (sub.evaluation === 'ไม่เข้าใจ') evalClass = 'not-understand';
+      if (sub.evaluation === 'ทำได้') evalClass = 'can-do';
+
+      tr.innerHTML = `
+        <td>${sub.title}</td>
+        <td><span class="eval-badge ${evalClass}">${sub.evaluation}</span></td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    // เปิดการแสดงผล Modal
+    overlay.classList.add('active');
+  }
+
+  function closeModal(event, forced = false) {
+    const overlay = document.getElementById('modalOverlay');
+    if (forced || event.target === overlay) {
+      overlay.classList.remove('active');
+    }
+  }
+
+  renderCards();
+</script>
+</body>
+</html>
