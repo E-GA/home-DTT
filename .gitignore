@@ -1,4 +1,0 @@
-.env
-calendar-events.json
-*.tmp
-__pycache__/
