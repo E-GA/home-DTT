@@ -1,611 +1,710 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Ga</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --orange: #FF6B35;
-            --orange-light: #FFF0EA;
-            --orange-dark: #CC4A1A;
-            --blue: #2563EB;
-            --blue-light: #EFF6FF;
-            --blue-dark: #1D4ED8;
-            --green: #0E9F6E;
-            --green-light: #E7F8F0;
-            --violet: #7C3AED;
-            --violet-light: #F2EAFE;
-            --bg: #F7F8FB;
-            --card: #FFFFFF;
-            --text: #1A1D2E;
-            --muted: #6B7280;
-            --border: #E5E7EB;
-            --shadow: 0 14px 34px rgba(26, 29, 46, 0.08);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            letter-spacing: 0;
-        }
-
-        body {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Sarabun', 'Noto Sans Thai', sans-serif;
-            overflow-x: hidden;
-        }
-
-        nav {
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 32px;
-            background: rgba(255, 255, 255, 0.92);
-            border-bottom: 1px solid var(--border);
-            backdrop-filter: blur(12px);
-        }
-
-        .nav-logo {
-            flex: 0 0 auto;
-            font-size: 22px;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--orange), var(--blue));
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .nav-links {
-            display: flex;
-            min-width: 0;
-            gap: 8px;
-            justify-content: flex-end;
-        }
-
-        .nav-links a {
-            padding: 6px 14px;
-            border-radius: 8px;
-            color: var(--muted);
-            font-size: 14px;
-            font-weight: 500;
-            text-decoration: none;
-            white-space: nowrap;
-            transition: background 0.2s, color 0.2s;
-        }
-
-        .nav-links a:hover {
-            background: var(--bg);
-            color: var(--text);
-        }
-
-        main {
-            flex: 1;
-            width: 100%;
-            max-width: 1040px;
-            margin: 0 auto;
-            padding: 48px 24px 60px;
-        }
-
-        .page-header {
-            margin-bottom: 42px;
-            text-align: center;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 16px;
-            padding: 5px 14px;
-            border-radius: 999px;
-            background: var(--blue-light);
-            color: var(--blue-dark);
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .badge-mark {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--orange);
-            box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.14);
-        }
-
-        .page-header h1 {
-            color: var(--text);
-            font-size: 30px;
-            font-weight: 700;
-            line-height: 1.42;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 24px;
-        }
-
-        .grid > * {
-            min-width: 0;
-        }
-
-        .card {
-            overflow: hidden;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            background: var(--card);
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow);
-        }
-
-        .card-hero {
-            position: relative;
-            min-height: 120px;
-            min-width: 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            overflow: hidden;
-            padding: 28px;
-            text-decoration: none;
-        }
-
-        .card-hero::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            opacity: 0.18;
-            background:
-                linear-gradient(120deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0)),
-                radial-gradient(circle at 82% 45%, rgba(255, 255, 255, 0.42), transparent 35%);
-        }
-
-        .orange-hero {
-            background: linear-gradient(135deg, #FF8C5A 0%, var(--orange) 58%, #D9551F 100%);
-        }
-
-        .blue-hero {
-            background: linear-gradient(135deg, #60A5FA 0%, var(--blue) 58%, #1E40AF 100%);
-        }
-
-        .hero-text-group,
-        .hero-icon {
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-text-group {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            min-width: 0;
-        }
-
-        .hero-label {
-            color: rgba(255, 255, 255, 0.78);
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .hero-title {
-            color: #FFFFFF;
-            font-size: 32px;
-            font-weight: 700;
-            line-height: 1.2;
-            overflow-wrap: anywhere;
-        }
-
-        .hero-icon {
-            width: 56px;
-            height: 56px;
-            display: grid;
-            place-items: center;
-            flex: 0 0 auto;
-            border: 1px solid rgba(255, 255, 255, 0.24);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.18);
-            color: #FFFFFF;
-            font-size: 28px;
-            font-weight: 700;
-        }
-
-        .item-list {
-            padding: 16px 24px 20px;
-            border-top: 1px solid var(--border);
-        }
-
-        .item-list-header {
-            margin-bottom: 12px;
-            color: var(--muted);
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        .item {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .item:last-child {
-            border-bottom: 0;
-        }
-
-        .item-dot {
-            width: 8px;
-            height: 8px;
-            flex: 0 0 auto;
-            margin-top: 7px;
-            border-radius: 50%;
-        }
-
-        .dot-orange {
-            background: var(--orange);
-        }
-
-        .dot-blue {
-            background: var(--blue);
-        }
-
-        .item-text {
-            color: var(--text);
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 1.6;
-        }
-
-        .item-empty {
-            color: var(--muted);
-            font-style: italic;
-        }
-
-        .date-chip {
-            display: inline-flex;
-            align-items: center;
-            margin-bottom: 6px;
-            padding: 3px 10px;
-            border-radius: 999px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        .chip-blue {
-            background: var(--blue-light);
-            color: var(--blue-dark);
-        }
-
-        .chip-orange {
-            background: var(--orange-light);
-            color: var(--orange-dark);
-        }
-
-        .schedule-section {
-            margin-top: 34px;
-            padding-top: 26px;
-            border-top: 1px solid var(--border);
-        }
-
-        .schedule-heading {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            gap: 18px;
-            margin-bottom: 16px;
-        }
-
-        .schedule-kicker {
-            color: var(--muted);
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        .schedule-heading h2 {
-            margin-top: 4px;
-            font-size: 24px;
-            font-weight: 700;
-            line-height: 1.35;
-        }
-
-        .schedule-count {
-            flex: 0 0 auto;
-            padding: 7px 14px;
-            border: 1px solid #B7D7C8;
-            border-radius: 999px;
-            background: var(--green-light);
-            color: #08764F;
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        .schedule-table {
-            overflow: hidden;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            background: var(--card);
-            box-shadow: var(--shadow);
-        }
-
-        .schedule-row {
-            display: grid;
-            grid-template-columns: minmax(140px, 1.1fr) minmax(110px, 0.9fr) minmax(150px, 1.2fr) minmax(110px, 0.8fr);
-            align-items: center;
-        }
-
-        .schedule-head {
-            background: #F2F5FA;
-            color: var(--muted);
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .schedule-row:not(.schedule-head) {
-            border-top: 1px solid var(--border);
-        }
-
-        .schedule-cell {
-            min-width: 0;
-            padding: 14px 16px;
-            line-height: 1.5;
-        }
-
-        .schedule-date {
-            font-weight: 700;
-        }
-
-        .shift-pill {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            justify-self: start;
-            min-width: 78px;
-            padding: 5px 12px;
-            border-radius: 999px;
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        .shift-morning {
-            background: var(--green-light);
-            color: #08764F;
-        }
-
-        .shift-afternoon {
-            background: var(--orange-light);
-            color: var(--orange-dark);
-        }
-
-        .shift-night {
-            background: var(--violet-light);
-            color: #5B21B6;
-        }
-
-        footer {
-            padding: 20px;
-            border-top: 1px solid var(--border);
-            background: #FFFFFF;
-            color: var(--muted);
-            font-size: 13px;
-            text-align: center;
-        }
-
-        footer span {
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--orange), var(--blue));
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        @media (max-width: 760px) {
-            nav {
-                padding: 0 16px;
-                gap: 12px;
-            }
-
-            main {
-                padding: 36px 18px 44px;
-            }
-
-            .page-header h1 {
-                font-size: 23px;
-            }
-
-            .grid {
-                grid-template-columns: 1fr;
-            }
-
-            .schedule-heading {
-                align-items: flex-start;
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .schedule-count {
-                align-self: flex-start;
-            }
-
-            .schedule-row {
-                grid-template-columns: 1fr;
-            }
-
-            .schedule-head {
-                display: none;
-            }
-
-            .schedule-row:not(.schedule-head) {
-                padding: 12px 14px;
-            }
-
-            .schedule-cell {
-                display: grid;
-                grid-template-columns: 86px 1fr;
-                gap: 12px;
-                padding: 5px 0;
-            }
-
-            .schedule-cell::before {
-                content: attr(data-label);
-                color: var(--muted);
-                font-size: 12px;
-                font-weight: 700;
-            }
-        }
-
-        @media (max-width: 560px) {
-            nav {
-                justify-content: flex-start;
-            }
-
-            .nav-links {
-                flex: 1;
-                gap: 4px;
-                justify-content: flex-start;
-            }
-
-            .nav-links a {
-                padding: 6px 8px;
-                font-size: 12px;
-            }
-
-            main {
-                max-width: 430px;
-            }
-
-            .card-hero {
-                padding: 24px 22px;
-            }
-
-            .hero-icon {
-                display: none;
-            }
-
-            .schedule-cell {
-                grid-template-columns: 80px 1fr;
-            }
-        }
-
-        @media (max-width: 420px) {
-            nav {
-                padding: 0 14px;
-            }
-
-            .card-hero {
-                padding: 22px 20px;
-            }
-
-            .hero-title {
-                font-size: 28px;
-            }
-
-            .schedule-heading h2 {
-                font-size: 21px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ความคืบหน้าการเรียนรู้</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #F7FBFF;
+    --surface:   #FFFFFF;
+    --surface2:  #EAF5FF;
+    --border:    #D5E7F7;
+    --text:      #19324D;
+    --muted:     #657B91;
+    --accent:    #2F80ED;
+    --accent2:   #00B8A9;
+    --done:      #19B978;
+    --progress:  #F6B73C;
+    --new:       #FF6B8A;
+    --shadow:    rgba(71, 102, 132, 0.18);
+  }
+
+  body {
+    font-family: 'IBM Plex Sans Thai', sans-serif;
+    background:
+      radial-gradient(circle at 15% 18%, rgba(255, 222, 89, 0.32), transparent 26%),
+      radial-gradient(circle at 86% 14%, rgba(86, 207, 225, 0.34), transparent 25%),
+      linear-gradient(135deg, #FFF8D7 0%, #EFF9FF 46%, #F7F1FF 100%);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 32px 24px 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-x: hidden;
+  }
+
+  /* ── Header ── */
+  .page-header {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .header-left {
+    min-width: 260px;
+  }
+
+  .header-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .page-title {
+    font-size: clamp(2.4rem, 4vw, 4.2rem);
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1.1;
+  }
+
+  .page-title span {
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .header-stats {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+
+  .learning-hours-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    border-radius: 999px;
+    padding: 10px 18px 10px 10px;
+    box-shadow: 0 16px 30px rgba(78, 121, 160, 0.16);
+  }
+
+  .learning-hours-circle {
+    width: 86px;
+    height: 86px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background:
+      linear-gradient(#fff, #fff) padding-box,
+      conic-gradient(var(--accent), var(--accent2), var(--progress), var(--accent)) border-box;
+    border: 7px solid transparent;
+    box-shadow: inset 0 0 0 1px rgba(47, 128, 237, 0.12);
+  }
+
+  .learning-hours-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 2.05rem;
+    font-weight: 500;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .learning-hours-copy {
+    min-width: 0;
+  }
+
+  .learning-hours-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.25;
+  }
+
+  .learning-hours-unit {
+    font-size: 0.86rem;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* ── Grid ── */
+  .cards-grid {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto 34px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, minmax(150px, auto));
+    gap: 18px;
+    min-width: 0;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    border-radius: 18px;
+    padding: 22px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    cursor: pointer;
+    transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s, background 0.18s;
+    position: relative;
+    overflow: hidden;
+    min-height: 150px;
+    min-width: 0;
+    max-width: 100%;
+    box-shadow: 0 18px 36px var(--shadow);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--card-accent, var(--accent)) 0%, transparent 58%);
+    opacity: 0.1;
+    transition: opacity 0.2s;
+    border-radius: inherit;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    background: #fff;
+    box-shadow: 0 22px 44px rgba(71, 102, 132, 0.24);
+    border-color: var(--card-accent, var(--accent));
+  }
+
+  .card:hover::before { opacity: 0.18; }
+
+  /* ── Avatar ── */
+  .avatar {
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+    background: var(--surface2);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.86);
+  }
+
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Fallback avatar with initials */
+  .avatar-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: #fff;
+    background: var(--card-accent, var(--accent));
+    user-select: none;
+  }
+
+  /* Status dot */
+  .status-dot {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    background: var(--muted);
+  }
+  .status-dot.done     { background: var(--done); }
+  .status-dot.progress { background: var(--progress); }
+  .status-dot.new      { background: var(--new); }
+
+  /* ── Info ── */
+  .card-info {
+    flex: 1 1 0;
+    width: 0;
+    min-width: 0;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .card-name {
+    font-size: 1.12rem;
+    font-weight: 600;
+    color: var(--text);
+    white-space: normal;
+    overflow: hidden;
+    line-height: 1.25;
+    margin-bottom: 6px;
+  }
+
+  .card-topic {
+    font-size: 0.92rem;
+    color: var(--muted);
+    white-space: normal;
+    overflow: hidden;
+    line-height: 1.35;
+    margin-bottom: 16px;
+  }
+
+  /* Progress bar */
+  .progress-wrap {
+    height: 8px;
+    background: #E1EDF8;
+    border-radius: 99px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+
+  .progress-bar {
+    height: 100%;
+    border-radius: 99px;
+    background: var(--card-accent, var(--accent));
+    transition: width 0.6s ease;
+  }
+
+  .progress-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .progress-pct {
+    color: var(--card-accent, var(--accent));
+    font-weight: 500;
+  }
+
+  /* ── New: Modal Style ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(25, 50, 77, 0.4);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    padding: 20px;
+  }
+
+  .modal-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal-container {
+    background: var(--surface);
+    border-radius: 24px;
+    width: 100%;
+    max-width: 650px;
+    box-shadow: 0 24px 50px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    transform: translateY(30px);
+    transition: transform 0.3s ease;
+    border: 1px solid var(--border);
+  }
+
+  .modal-overlay.active .modal-container {
+    transform: translateY(0);
+  }
+
+  .modal-header {
+    background: var(--surface2);
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .modal-profile {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .modal-title h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .modal-title p {
+    font-size: 0.95rem;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .close-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--muted);
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+
+  .close-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text);
+  }
+
+  .modal-body {
+    padding: 24px;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  /* ── Table Style ── */
+  .detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    text-align: left;
+  }
+
+  .detail-table th, .detail-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.95rem;
+  }
+
+  .detail-table th {
+    background: #F4F9FF;
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .detail-table th:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+  }
+  .detail-table th:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+
+  .detail-table td {
+    color: var(--text);
+  }
+
+  /* Badge Evaluation Status */
+  .eval-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  .eval-badge.not-understand { background: #FFEDF1; color: var(--new); }
+  .eval-badge.understand { background: #FFF7E6; color: var(--progress); }
+  .eval-badge.can-do { background: #E6F9F0; color: var(--done); }
+
+  .eval-score-card {
+    --score-color: var(--progress);
+    display: grid;
+    gap: 6px;
+    justify-items: start;
+    min-width: 8.5rem;
+  }
+
+  .eval-score-card.not-understand { --score-color: var(--new); }
+  .eval-score-card.understand { --score-color: var(--progress); }
+  .eval-score-card.can-do { --score-color: var(--done); }
+  .eval-score-card.pending { --score-color: var(--muted); opacity: 0.78; }
+
+  .eval-score-main {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    line-height: 1;
+  }
+
+  .eval-score-number {
+    color: var(--score-color);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.7rem;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .eval-score-word {
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+
+  /* ── Schedule Table ── */
+  .schedule-section {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  .schedule-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 14px;
+  }
+
+  .schedule-kicker {
+    color: var(--accent);
+    font-size: 0.92rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .schedule-heading h2 {
+    color: var(--text);
+    font-size: clamp(1.45rem, 2.6vw, 2rem);
+    font-weight: 700;
+    line-height: 1.18;
+    margin-top: 3px;
+  }
+
+  .schedule-count {
+    flex-shrink: 0;
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1;
+    padding: 10px 14px;
+    box-shadow: 0 10px 22px rgba(71, 102, 132, 0.1);
+  }
+
+  .schedule-table {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 18px 36px rgba(71, 102, 132, 0.14);
+  }
+
+  .schedule-row {
+    display: grid;
+    grid-template-columns: 160px 140px minmax(240px, 1fr) 140px;
+    min-width: 680px;
+  }
+
+  .schedule-row + .schedule-row {
+    border-top: 1px solid var(--border);
+  }
+
+  .schedule-head {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #F4F9FF;
+  }
+
+  .schedule-head .schedule-cell {
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .schedule-cell {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    padding: 15px 18px;
+    color: var(--text);
+    font-size: 0.96rem;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+
+  .schedule-row:not(.schedule-head) {
+    background: rgba(255, 255, 255, 0.84);
+    transition: background 0.18s, transform 0.18s;
+  }
+
+  .schedule-row:not(.schedule-head):nth-child(odd) {
+    background: #FBFDFF;
+  }
+
+  .schedule-row:not(.schedule-head):hover {
+    background: #F1FAFF;
+  }
+
+  .schedule-date {
+    color: var(--accent);
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .schedule-row:not(.schedule-head) .schedule-cell:nth-child(3) {
+    font-weight: 600;
+  }
+
+  .shift-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 74px;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .shift-morning {
+    background: #E6F9F0;
+    color: #0D8A58;
+  }
+
+  .shift-afternoon {
+    background: #FFF2D7;
+    color: #A86200;
+  }
+
+  .shift-night {
+    background: #E9F0FF;
+    color: #3558B8;
+  }
+
+
+  /* ── Responsive ── */
+  @media (max-width: 860px) {
+    .cards-grid { grid-template-columns: repeat(2, 1fr); }
+    body { justify-content: flex-start; }
+    .schedule-row {
+      grid-template-columns: 145px 120px minmax(220px, 1fr) 120px;
+      min-width: 605px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    body { padding: 22px 14px; }
+    .page-header,
+    .cards-grid {
+      width: 100%;
+      max-width: calc(100vw - 28px);
+    }
+    .page-header { margin-bottom: 18px; }
+    .header-stats { width: 100%; justify-content: center; }
+    .learning-hours-card { width: 100%; max-width: 340px; justify-content: center; }
+    .learning-hours-circle { width: 76px; height: 76px; }
+    .learning-hours-num { font-size: 1.75rem; }
+    .cards-grid { grid-template-columns: 1fr; gap: 12px; }
+    .card { min-height: 0; padding: 18px 16px; gap: 12px; }
+    .avatar { width: 54px; height: 54px; border-radius: 14px; }
+    .card-name { font-size: 1rem; }
+    .progress-label { justify-content: flex-start; }
+    .schedule-section { max-width: calc(100vw - 28px); }
+    .schedule-heading { align-items: flex-start; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+    .schedule-count { padding: 8px 12px; font-size: 0.82rem; }
+    .schedule-table { border-radius: 14px; }
+    .schedule-row {
+      grid-template-columns: 132px 105px minmax(180px, 1fr) 105px;
+      min-width: 522px;
+    }
+    .schedule-cell { padding: 12px 14px; font-size: 0.84rem; }
+    .schedule-head .schedule-cell { font-size: 0.76rem; }
+    .shift-pill { min-width: 64px; padding: 5px 10px; font-size: 0.76rem; }
+    .modal-header { padding: 16px; }
+    .modal-body { padding: 16px; }
+    .detail-table th, .detail-table td { padding: 10px 8px; font-size: 0.85rem; }
+    .eval-score-card { min-width: 6.8rem; gap: 5px; }
+    .eval-score-number { font-size: 1.35rem; }
+    .eval-score-word { font-size: 0.72rem; }
+  }
+</style>
 </head>
 <body>
-    <nav>
-        <div class="nav-logo">E-Ga</div>
-        <div class="nav-links">
-            <a href="https://e-ga.github.io/ez-time/">ช่วยงาน</a>
-            <a href="https://e-ga.github.io/hft-ega/dashboard.html">รับความรู้</a>
+
+<div class="page-header">
+  <div class="header-left">
+    <h1 class="page-title">ดูสถานะของคุณ.</h1>
+  </div>
+  <div class="header-stats" aria-label="ชั่วโมงการเรียนรู้">
+    <div class="learning-hours-card">
+      <div class="learning-hours-circle">
+        <div class="learning-hours-num" id="learningHours">0</div>
+      </div>
+      <div class="learning-hours-copy">
+        <div class="learning-hours-label">ชั่วโมง</div>
+        <div class="learning-hours-unit">ที่ให้ความรู้ไปแล้ว</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="cards-grid" id="cardsGrid"></div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-container" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-profile">
+        <div class="avatar" id="modalAvatarWrap">
+          <img id="modalAvatar" src="" alt="">
+          <div id="modalFallback" class="avatar-fallback" style="display:none"></div>
         </div>
-    </nav>
-
-    <main>
-        <header class="page-header">
-            <div class="badge"><span class="badge-mark"></span>ครอบครัวด๊อกเตอร์เต่า</div>
-            <h1>คุณจะส่องอะไร<br>เลือกหมวดหมู่ได้เลย</h1>
-        </header>
-
-        <section class="grid" aria-label="หมวดหมู่">
-            <div class="card">
-                <a href="https://e-ga.github.io/ez-time/" class="card-hero orange-hero">
-                    <div class="hero-text-group">
-                        <span class="hero-label">บริการ</span>
-                        <span class="hero-title">ช่วยงานกดดู</span>
-                    </div>
-                    <div class="hero-icon" aria-hidden="true">+</div>
-                </a>
-                <div class="item-list">
-                    <div class="item-list-header">ภารกิจล่าสุด</div>
-                    <div class="item">
-                        <span class="item-dot dot-orange" style="opacity:0.35"></span>
-                        <span class="item-text item-empty">ยังไม่มีภารกิจงาน</span>
-                    </div>
-                    <div class="item">
-                        <span class="item-dot dot-orange" style="opacity:0.2"></span>
-                        <span class="item-text item-empty">-</span>
-                    </div>
-                    <div class="item">
-                        <span class="item-dot dot-orange" style="opacity:0.2"></span>
-                        <span class="item-text item-empty">-</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <a href="https://e-ga.github.io/home-DTT/leaning.html" class="card-hero blue-hero">
-                    <div class="hero-text-group">
-                        <span class="hero-label">การเรียนรู้</span>
-                        <span class="hero-title">รับความรู้กดดู</span>
-                    </div>
-                    <div class="hero-icon" aria-hidden="true">i</div>
-                </a>
-                <div class="item-list">
-                    <div class="item-list-header">อัปเดตล่าสุด</div>
-
-                    <div class="item">
-                        <span class="item-dot dot-blue"></span>
-                        <div>
-                            <div class="date-chip chip-blue">8/6/2569</div>
-                            <div class="item-text">ไม่มีการแลกเปลี่ยนความรู้</div>
-                        </div>
-                    </div>
-
-                    <div class="item">
-                        <span class="item-dot dot-blue"></span>
-                        <div>
-                            <div class="date-chip chip-orange">วิทย์ ป.5</div>
-                            <div class="item-text">มีการบ้านทำแบบฝึกหัดท้ายบทที่ 1</div>
-                        </div>
-                    </div>
-
-                    <div class="item">
-                        <span class="item-dot dot-blue" style="opacity:0.2"></span>
-                        <span class="item-text item-empty">-</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="schedule-section" aria-labelledby="scheduleTitle">
+        <div class="modal-title">
+          <h3 id="modalName">ชื่อ ผู้ใช้งาน</h3>
+          <p id="modalTopic">หัวข้อที่กำลังศึกษา</p>
+        </div>
+      </div>
+      <button class="close-btn" onclick="closeModal(forced=true)">&times;</button>
+    </div>
+    <div class="modal-body">
+      <table class="detail-table">
+        <thead>
+          <tr>
+            <th>เนื้อหาที่ศึกษา</th>
+            <th style="width: 190px;">ผลการประเมิน</th>
+          </tr>
+        </thead>
+        <tbody id="modalTableBody">
+          </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+   <section class="schedule-section" aria-labelledby="scheduleTitle">
             <div class="schedule-heading">
                 <div>
-                    <div class="schedule-kicker">ตารางกิจกรรม</div>
-                    <h2 id="scheduleTitle">เดือนมิถุนายน 2569</h2>
+                    <div class="schedule-kicker">ตารางงานของผู้ให้ความรู้</div>
+                    <h2 id="scheduleTitle">เดือนสิงหาคม2569</h2>
                 </div>
-                <div class="schedule-count">ทั้งหมด 7 รายการ</div>
+                <div class="schedule-count">ทั้งหมด 6 รายการ</div>
             </div>
 
             <div class="schedule-table" role="table" aria-label="ตารางกิจกรรมเดือนมิถุนายน 2569">
@@ -617,12 +716,12 @@
                 </div>
 
                 <div class="schedule-row" role="row">
-                    <div class="schedule-cell schedule-date" role="cell" data-label="วันที่">11 มิ.ย. 2569</div>
-                    <div class="schedule-cell" role="cell" data-label="วัน">พฤหัสบดี</div>
-                    <div class="schedule-cell" role="cell" data-label="กิจกรรม">ทำงานดึก</div>
+                    <div class="schedule-cell schedule-date" role="cell" data-label="วันที่">29 สิงหาคม 2569</div>
+                    <div class="schedule-cell" role="cell" data-label="วัน">เสาร์</div>
+                    <div class="schedule-cell" role="cell" data-label="กิจกรรม">ทำงานเช้า</div>
                     <div class="schedule-cell" role="cell" data-label="กะ"><span class="shift-pill shift-night">กะดึก</span></div>
                 </div>
-
+<!-- 
                 <div class="schedule-row" role="row">
                     <div class="schedule-cell schedule-date" role="cell" data-label="วันที่">14 มิ.ย. 2569</div>
                     <div class="schedule-cell" role="cell" data-label="วัน">อาทิตย์</div>
@@ -636,12 +735,7 @@
                     <div class="schedule-cell" role="cell" data-label="กิจกรรม">ทำงานบ่าย</div>
                     <div class="schedule-cell" role="cell" data-label="กะ"><span class="shift-pill shift-afternoon">กะบ่าย</span></div>
                 </div>
-                <div class="schedule-row" role="row" style="background-color: #ffcccc;">
-                    <div class="schedule-cell schedule-date" role="cell" data-label="วันที่">19 ถึง 21  มิ.ย. 2569</div>
-                    <div class="schedule-cell" role="cell" data-label="วัน">ศุกร์-เสาร์-อาทิตย์</div>
-                    <div class="schedule-cell" role="cell" data-label="กิจกรรม">เดินทางไปต่างจังหวัด</div>
-                    <div class="schedule-cell" role="cell" data-label="กะ"><span class="shift-pill shift-afternoon">กะเช้า</span></div>
-                </div>
+
                 <div class="schedule-row" role="row">
                     <div class="schedule-cell schedule-date" role="cell" data-label="วันที่">22 มิ.ย. 2569</div>
                     <div class="schedule-cell" role="cell" data-label="วัน">จันทร์</div>
@@ -661,13 +755,298 @@
                     <div class="schedule-cell" role="cell" data-label="วัน">ศุกร์</div>
                     <div class="schedule-cell" role="cell" data-label="กิจกรรม">ทำงานดึก</div>
                     <div class="schedule-cell" role="cell" data-label="กะ"><span class="shift-pill shift-night">กะดึก</span></div>
-                </div>
+                </div> -->
             </div>
         </section>
-    </main>
 
-    <footer>
-        powered by <span>E-Ga</span>
-    </footer>
+<script>
+  // เพิ่ม subTopics เพื่อนำไปแสดงในตารางรายละเอียดแยกตามรายบุคคล
+  const people = [
+    {
+      id: 1,
+      name: "บอล",
+      topic: "ใช้ชีวิตพืนฐานภาษาไทย",
+      pct: 20,
+      status: "done",
+      accent: "#6C8EF5",
+      avatar: "https://api.dicebear.com/8.x/thumbs/svg?seed=siriporn&backgroundColor=6C8EF5",
+      initials: "ศว",
+      subTopics: [
+        { title: "<a href=\"timebon.jpg\" target=\"_blank\" rel=\"noopener\">การใช้ชีวิต-เรื่องเวลา กดดูคะแนน</a>", evaluation: "10" },
+        { title: "อ่านภาษาไทย", evaluation: "5" },
+        { title: "การเขียนและสื่อการภาษาไทย", evaluation: "3" },
+        // { title: "Flexbox & Grid Layouts", evaluation: "ทำได้" }
+      ]
+    },
+    {
+      id: 2,
+      name: "จอรสบรูช",  
+      topic: "วิทย์+คณิต",
+      pct: 30 ,
+      status: "progress",
+      accent: "#F7C948",
+      avatar: "https://api.dicebear.com/8.x/thumbs/svg?seed=thanakorn&backgroundColor=F7C948",
+      initials: "ธพ",
+      subTopics: [
+        { title: "เรื่องที่ไปของขยะในมือเรา", evaluation: "8" },
+        { title: "การสังเกตและการอธิบาย" , evaluation: "7" },
+        { title: "แรงลัพธ์และการอธิบาย" , evaluation: "5" },
+        { title: "แรงเสียดทานและการอธิบาย" , evaluation: "8" },
+        { title: "ผลของแรงทั้งสองและการอธิบาย" , evaluation: "8" },
+         { title: "เสียงกับการได้ยิน (อยู่ระหว่างถ่ายทอด)" , evaluation: "0" }
+      ]
+    },
+    {
+      id: 3,
+      name: "พัดเตอร์ **เข้าร่วม 8-9 ส.ค 2569" ,
+      topic: "วิทย์+คณิต",
+      pct: 0,
+      status: "progress",
+      accent: "#4ECDC4",
+      avatar: "https://api.dicebear.com/8.x/thumbs/svg?seed=naphatson&backgroundColor=4ECDC4",
+      initials: "นด",
+      subTopics: [
+        // { title: "JSX & Props", evaluation: "ทำได้" },
+        // { title: "useState & useEffect", evaluation: "เข้าใจ" },
+        // { title: "State Management (Context API)", evaluation: "ไม่เข้าใจ" }
+      ]
+    },
+    {
+      id: 4,
+      name: "วีด้า.. รอการยืนยัน",
+      topic: "วิทย์+คณิต",
+      pct: 0 ,
+      status: "done",
+      accent: "#3DDC97",
+      avatar: "https://api.dicebear.com/8.x/thumbs/svg?seed=kritsana&backgroundColor=3DDC97",
+      initials: "กอ",
+      subTopics: [
+        // { title: "Express.js Setup", evaluation: "ทำได้" },
+        // { title: "Routing & Middleware", evaluation: "ทำได้" },
+        // { title: "JWT Authentication", evaluation: "เข้าใจ" }
+      ]
+    },
+    {
+      id: 5,
+      name: "มะลิ.. รอการยืนยัน",
+      topic: "วิทย์+คณิต",
+      pct: 0,
+      status: "progress",
+      accent: "#F76F8E",
+      avatar: "https://api.dicebear.com/8.x/thumbs/svg?seed=pimchanok&backgroundColor=F76F8E",
+      initials: "พแ",
+      subTopics: [
+        // { title: "Typography & Color Theory", evaluation: "เข้าใจ" },
+        // { title: "Component Library Design", evaluation: "ไม่เข้าใจ" },
+        // { title: "Prototyping in Figma", evaluation: "เข้าใจ" }
+      ]
+    },
+    // {
+    //   id: 6,
+    //   name: "วรรณพร ทองคำ",
+    //   topic: "Database & SQL",
+    //   pct: 67,
+    //   status: "progress",
+    //   accent: "#A78BFA",
+    //   avatar: "https://api.dicebear.com/8.x/thumbs/svg?seed=wannaporn&backgroundColor=A78BFA",
+    //   initials: "วท",
+    //   subTopics: [
+    //     { title: "Database Normalization", evaluation: "ทำได้" },
+    //     { title: "CRUD Operations (SQL)", evaluation: "เข้าใจ" },
+    //     { title: "Joins & Subqueries", evaluation: "ไม่เข้าใจ" }
+    //   ]
+    // },
+    // {
+    //   id: 7,
+    //   name: "ปรีชา หาญกล้า",
+    //   topic: "Python for Data",
+    //   pct: 12,
+    //   status: "new",
+    //   accent: "#FB923C",
+    //   avatar: "https://api.dicebear.com/8.x/thumbs/svg?seed=precha&backgroundColor=FB923C",
+    //   initials: "ปห",
+    //   subTopics: [
+    //     { title: "Python Syntax & Loops", evaluation: "เข้าใจ" },
+    //     { title: "Pandas DataFrames", evaluation: "ไม่เข้าใจ" },
+    //     { title: "Data Visualization (Matplotlib)", evaluation: "ไม่เข้าใจ" }
+    //   ]
+    // },
+    // {
+    //   id: 8,
+    //   name: "มณีรัตน์ สุขใส",
+    //   topic: "Cloud & Deployment",
+    //   pct: 88,
+    //   status: "done",
+    //   accent: "#38BDF8",
+    //   avatar: "https://api.dicebear.com/8.x/thumbs/svg?seed=maneerat&backgroundColor=38BDF8",
+    //   initials: "มส",
+    //   subTopics: [
+    //     { title: "Docker Containerization", evaluation: "ทำได้" },
+    //     { title: "CI/CD Pipelines", evaluation: "ทำได้" },
+    //     { title: "AWS EC2 Deployment", evaluation: "เข้าใจ" }
+    //   ]
+    // }
+  ];
+
+  const statusLabel = { done: "ความคืบหน้า", progress: "ความคืบหน้า", new: "ความคืบหน้า" };
+  const learningHours = 30 ; 
+
+  function renderLearningHours() {
+    const hourElement = document.getElementById('learningHours');
+    if (hourElement) hourElement.textContent = learningHours;
+  }
+
+  function escapeAttr(value) {
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
+  function getEvaluationRating(evaluation) {
+    const label = String(evaluation ?? '').trim();
+
+    if (!label) {
+      return { score: 0, className: 'pending', label: 'ยังไม่มีผลประเมิน' };
+    }
+
+    const numericScore = Number(label);
+    if (Number.isFinite(numericScore)) {
+      const score = Math.max(0, Math.min(10, Math.round(numericScore)));
+      const className = score >= 8
+        ? 'can-do'
+        : score >= 5
+          ? 'understand'
+          : score > 0
+            ? 'not-understand'
+            : 'pending';
+
+      return { score, className, label: `${score} คะแนน` };
+    }
+
+    if (label.includes('ทำได้')) {
+      return { score: 10, className: 'can-do', label };
+    }
+
+    if (label.includes('ไม่เข้าใจ')) {
+      return { score: 3, className: 'not-understand', label };
+    }
+
+    if (label.includes('เข้าใจ')) {
+      return { score: 7, className: 'understand', label };
+    }
+
+    return { score: 0, className: 'pending', label };
+  }
+
+  function renderEvaluationScore(evaluation) {
+    const rating = getEvaluationRating(evaluation);
+    const title = `${rating.score} คะแนน จาก 10`;
+    const ariaLabel = `${rating.score} คะแนน จาก 10`;
+
+    return `
+      <div class="eval-score-card ${rating.className}" title="${escapeAttr(title)}" aria-label="${escapeAttr(ariaLabel)}">
+        <div class="eval-score-main">
+          <span class="eval-score-number">${rating.score}</span>
+          <span class="eval-score-word">คะแนน</span>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderCards() {
+    const grid = document.getElementById('cardsGrid');
+
+    people.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.style.setProperty('--card-accent', p.accent);
+      // ผูก Event Click เข้ากับเปิดหน้าต่างรายละเอียด
+      card.onclick = () => openModal(p);
+
+      card.innerHTML = `
+        <div class="avatar">
+          <img src="${p.avatar}" alt="${p.name}"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+          <div class="avatar-fallback" style="display:none">${p.initials}</div>
+          <div class="status-dot ${p.status}"></div>
+        </div>
+        <div class="card-info">
+          <div class="card-name">${p.name}</div>
+          <div class="card-topic">${p.topic}</div>
+          <div class="progress-wrap">
+            <div class="progress-bar" style="width:0%" data-pct="${p.pct}"></div>
+          </div>
+          <div class="progress-label">
+            <span>${statusLabel[p.status]}</span>
+            <span class="progress-pct">${p.pct}%</span>
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    // Animate bars after render
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        document.querySelectorAll('.progress-bar').forEach(bar => {
+          bar.style.width = bar.dataset.pct + '%';
+        });
+      }, 120);
+    });
+
+    renderLearningHours();
+  }
+
+  // ── New: Functions Control Modal ──
+  function openModal(person) {
+    const overlay = document.getElementById('modalOverlay');
+    const modalImg = document.getElementById('modalAvatar');
+    const modalFallback = document.getElementById('modalFallback');
+    
+    // ตั้งค่าโปรไฟล์ใน Modal
+    document.getElementById('modalName').textContent = person.name;
+    document.getElementById('modalTopic').textContent = person.topic;
+    
+    // จัดการรูปภาพ Avatar ใน Modal
+    modalImg.src = person.avatar;
+    modalImg.style.display = 'block';
+    modalFallback.style.display = 'none';
+    modalFallback.textContent = person.initials;
+    modalFallback.style.background = person.accent;
+    
+    modalImg.onerror = function() {
+      this.style.display = 'none';
+      modalFallback.style.display = 'flex';
+    };
+
+    // สร้างแถวข้อมูลตาราง 2 คอลัมน์
+    const tbody = document.getElementById('modalTableBody');
+    tbody.innerHTML = ''; // เคลียร์ข้อมูลเก่าออกก่อน
+    
+    person.subTopics.forEach(sub => {
+      const tr = document.createElement('tr');
+      
+      tr.innerHTML = `
+        <td>${sub.title}</td>
+        <td>${renderEvaluationScore(sub.evaluation)}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    // เปิดการแสดงผล Modal
+    overlay.classList.add('active');
+  }
+
+  function closeModal(event, forced = false) {
+    const overlay = document.getElementById('modalOverlay');
+    if (forced || event.target === overlay) {
+      overlay.classList.remove('active');
+    }
+  }
+
+  renderCards();
+</script>
 </body>
 </html>
